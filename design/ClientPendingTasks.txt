@@ -1,0 +1,68 @@
+
+Video --> 6 hs explore from Naveen, Html 5 and css --> share by yogesh sir at yammer 26-05-2014
+
+
+Caching of image, js and html
+Order, group State should be saved and persist
+Column on/off setting should be saved: In progress
+Date : today, +1, -1 support
+Composite fk : option : fk of type : string ,value : query
+Saving of order and group in user last state
+FTS ; DatAModel filter adding for fTS
+
+
+
+
+displayField --> name --> address.name, contact.name, name, it should be multiple display exp
+    name,address
+    name,contact
+    name
+time, unit, schedule, composite fk
+
+http://127.0.0.1:5100/js/lib/angular-animate.min.js.map : could not be loaded
+
+
+
+
+Multiple FK saving --> issue -->$$ is going in saving --> 	[{"$update":[{"$set":{"label":"Todos2","fields":[{"field":"tasks","label":"Tasks","type":"string","ui":"text","visibility":true,"collectionid":{"collection":"Todos","_id":"536a2fb1cf2623940f000f32"},"_id":"536a2fd7cf2623940f000f71","$$hashKey":"0JR"}]},"_id":"536cc07305a27aac0d0000b0"}],"$collection":"pl.qviews"}]
+Nested table inside nested table
+If not field given to set, then display fields is not showing
+Quick view --> add fields, hidden fields, field override
+$recrusive
+focus on first component in panel
+
+
+
+
+
+
+* Date filter and number filter
+* New Quick view
+* Update action
+* Header action
+
+ * DataModel : (4-5 days), Basic saving has been implement)
+    **Default value,(2D)
+    **Saving : Rohit (1 d)
+    ** Add Filter / Remove Filter
+    ** Add FTS
+    ** Filter interpretation for saving
+    ** Test cases
+
+
+ * Child application
+ * View merging --> (rohit 2d)
+    ** User + Admin + Developer :
+    ** Ordering in memory for columns, actions and childs
+
+ * Column menu --(Set filter, Set order, Set Group, Set Label, Set width) - (1 D)
+ * Editbale and Visible support in Grid and Form and Nested Grid (2 d) : Ashish
+ * Footer Aggregate ( 4 h) : Ashish
+ * Caching in FK
+
+
+
+ * Dashboard --> Unplanned
+ * Html view --> Unplanned
+ * Validation --> Mandatory ( Low P) Unplanned
+

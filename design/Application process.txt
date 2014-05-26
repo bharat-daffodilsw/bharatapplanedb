@@ -1,0 +1,9 @@
+
+testuser  :username
+testuser :password
+testuser : db
+
+
+testrole : New role
+testapplication
+

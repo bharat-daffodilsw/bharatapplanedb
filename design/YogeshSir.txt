@@ -1,0 +1,682 @@
+!!!!------------------!!!!
+
+Admin DB, Local DB --> One table, local want some column only, now in admin some column get changed, what to do
+Child v/s nested array as fk
+What to return on batch update result --> and should we fire query for getting required updated field value on update
+tx : usre crate mail send, then rollback : it is issue
+INC --> How to dec auto inc number if rollback
+client time zone --> server, need to get pending day in month, at client it was 17 but at server it is 16, wht to do ??
+order-> delivery case is not clear in trigger fire
+CRM data entry from website to CRM with token ??
+When to add unique index on collection when aplication is installed in organization
+
+
+!!!!------------------!!!!
+****************10-05-14**********
+    AdminDB
+    ApplaneDB
+    Konnect TV (Actual)
+    Konnect TV Local (Commit to)
+
+    LocalDB
+
+    Every db have its shadow db for developer, developer may have right or not to develop in main db but can do development in shadow db
+
+
+Childs can be field, type : object , multiple  :true, query :{}
+
+****************03-05-14**********
+    Auto inc
+        Separate table, that will be used for a value ,! doubt how will we know that in job given value is
+        if tx rollback we need to reduce value on the basis of some filter measn if value:50 then dec otherwise no, it should also be run on delete, on rollback,how it will be possible need to discuss
+    _id --> objectid vs string
+            --> we first try to convert _id into objectid, if error then use its value as string, for fk same way we will keep objectid
+    default value --> vli.insert and vli.delete shold be given, some method for client and server distinction need to be give
+
+
+
+
+
+****************02-05-14**********
+    Array operatoin discussion
+
+    voucher  = {no:1, vlis :[
+        {_id:"vli1", amount:100, account:cash},
+        {_id:"vli2", amount:100, account:bank},
+        {_id:"vli3", amount:-200, account:Salary}
+    ]}
+
+    var operation = {_id:vli1, }
+
+
+****************30-04-14**********
+applane db
+    udpate(){
+
+        module.pre(){
+                     mongo.update(){
+                        module.post()
+                     }
+        }
+
+    }
+            var d  =docuemnt
+                cloned = new Dcuemnt()
+
+               triggermodule
+                    pre (d)
+                    post (cloned)
+
+             subquery :
+                pre ()
+
+            module can have two behaviour --> clone or updated document
+
+        =====
+        mongo filter -->
+
+        statusid :"xxxuiiiddd" -> new ObjectId(xxxuiiiddd), _id = new ObjectId().toString
+        statusid :"ram" --> "ram"
+
+        _id :""
+
+        {task:"t1",assignto:"rohit"}
+        {_id:"xxx",task:"t1",assign:"rohit", dob:"2017-12-12"}
+        How to move date/objectid between client and server
+
+
+
+
+
+********************29-04-14*********
+Child alternate method
+
+
+orderno : 10,
+code    : xx
+amount : 2000
+deliveries : []
+	deliveryno : dd10
+	code		:xx11
+	amount     :500
+
+	deliveryno : dd11
+	code		:xx22
+	amount     :1500
+
+
+
+Tasks
+	t1 : 		deployment on heroku
+	deliveryid	: {_id:dd11,code:xx22,}
+	orderid		:{_id:10,code:xx}
+
+    var taskFieldDefinition = [
+                                {field:task,type:string},
+                                {field:"orderid",type:"fk", collection:"orders",set:[code]},
+                                {field:"deliveryid",type:"fk", collection:"orders.deliveries",set:[code]}
+                            ]
+
+	var query = {
+	                $collection:"tasks",$fields:{task:1,deliveryid.amount:1,deliveryid.code:1}
+	            }
+
+
+
+    var vliCollection =
+                    {
+                        collection:"vouchers"
+                        fields : [
+                            {field:"vouhcerno"}
+                            {field:"vli"}
+                            {field:"narration",prentfield:{_id:"vli"}}
+                        ]
+                    }
+    var vliCollectionQuery = {
+                                $collection:"__collections__",
+                                $filter:{collection:"vouchers"},
+                                $recursive:{fields:{parentfieldid:"_id"}}
+                             }
+
+     var employees = {
+                                     $collection:"employees",
+                                     $filter:{teamlead:null},
+                                     $recursive:{teamlead:"_id",$alias:"team"}
+                                  }
+
+
+
+
+
+*****************26-04-14
+Data conversion of group data to level, data field should not have any level,
+        data : [
+            {_id:"Accounts", children:[
+                {
+                    _id:"completed"
+                    children : [
+                        {_id:1,task:"T1"},
+                        {_id:2,task:"T2"}
+                    ]
+                },
+                 {
+                                    _id:"inprogress"
+                                    children : [
+                                        {_id:3,task:"T3"},
+                                        {_id:4,task:"T4"}
+                                    ]
+                                }
+            ]}
+        ]
+        var applidGroups : [{group:"businesfunction",aggregates:["count","estefforts"]},{group:"status"}]
+                            data : 2
+
+    metadata:{
+        datalevel:2
+    }
+    data :[result:expectedData,]
+
+        var expectedData = [
+            {_id:"Accounts",_group:0},
+            {_id:"completed",_group:1},
+            {_id:"1",task:"T1"},
+            {_id:"2",task:"T2", _level:2},
+            {_id:"inprogress",_group:1,_level:1},
+            {_id:"3",task:"T3", _level:2},
+            {_id:"4",task:"T4", _level:2}
+
+
+        ]
+
+                    {_id:"Asset",_group:0,level:0},
+                    {_id:"Current Asset",_group:0,level:1},
+                    {_id:"Account",_group:1},
+                    {_id:"1",voucher:"T1"},
+                    {_id:"2",task:"T2", _level:2},
+                    {_id:"inprogress",_group:1,_level:1},
+                    {_id:"3",task:"T3", _level:2},
+                    {_id:"4",task:"T4", _level:2}
+[
+        ]
+
+
+[
+    {{_id:"3",task:"T3", status:"inprogress",businessfunction:""},}
+]
+
+
+>>>>>>>>>>Default Value
+    person.js --> it should be availabe at client side
+        var db;
+        var row;
+
+        function onValueChange(){
+            row.name = row.fname + row.lname;
+        }
+
+
+    prsons
+        fname
+        lname
+        name --> fname + lname  -- function : onValueChange,
+    vouchers
+        profitcenter
+        vli
+            profitcenter
+    invoices
+        vendor
+        currency
+        conversionrate --> service on currency to get conversion rate
+        lineitems : [] --> depens on vendor,query
+
+        >>>>>30-04-14
+
+        Voucher = ApplaneDB.getReference(Voucher)
+
+        Voucher.on('value.fname,value.mname', Fuction (){
+
+        });
+        Voucher.on('value:[fname,mname]', Fuction ());
+
+        Voucher.on('value:[fname]', Fuction ());
+        Voucher.on('onchildadded", Fuction ());  --> New row added
+
+        Voucher.on('child_removed", Fuction ());
+        Voucher.on('child_changed", Fuction ());
+
+        city -> state --> country
+        city :{city:"hisar",stateid:"haryana", country:"india"}
+        cities :
+            trigger
+             eventname  : function
+                value  :
+                value  :
+                value:[fnmae] : function
+
+        onrowadd --   client --ok, server --no--  when blank row is added
+        onrowdelete  -when row is deleted
+        onrowsaved  -- client - no, server yes --when insert is called at srever - -insert,update,delete
+        value -  client + servr
+        vli --> voucher document
+        vli.account -- vli docuemnt + voucher as parent
+
+        var voucher = {no:12,lineitem:[{account:"cash",amount:20},{account:"salary",amount:-20}]}
+
+        vli : two documetn of vli, update, nochange
+
+        vli : two documetn of vli, update/nochange, update
+
+
+        document, logger, db, callback
+
+        commit
+
+       /update?{$collection:"cities",udpate:{_id:"hisar",$set:{city:"New hisar"}}}
+
+       DataModel(query,collection,data){
+
+        function onValueChange(oldValue, newValue){
+            field = "city"
+            row = {}
+
+
+
+        }
+
+       }
+
+        Applane --DB
+                load collection
+                    cities
+                        module - pre update
+                            fk
+                            dataypemodule
+                            trigger(doc,collection, db){
+                            collection
+
+
+                            }
+                            tx
+
+
+    Required Field
+    Order --> Deliveries
+    Error message
+
+
+
+*****************End of 26-04-14
+
+
+
+  *******
+  With Yogesh sir 17-04-14 (datamodel default value)
+    fname : Rohit
+    lname        Bansal
+    name : fname+lname ,
+      required columns
+          fname
+          lname
+          return this.fname+' ' + this.lname
+
+
+
+
+
+    city : "Hansi"
+    address : name + city
+    date : new Date()
+
+    accountid : Cash
+    accountgroup : account.accountgroupid
+    __insert__ : true
+
+    date : new Date() --> __insert__
+
+     Vouchers
+          profitcenter
+
+     Voucherlineitems
+          profitcenter --> voucher.profitecenter
+          {voucherno:10,profitcenter:{},voucherlineitem:{_id:10,account:cash}}
+              return this.profitecenter
+
+          amount  1000
+          stax      10 --> voucherlineite.amount
+                  return this.voucerlineitem.ammount * 0.10
+
+          NEt     1010    voucherlineite.amount, voucherlineitem.stax
+                  return this.vli.amount + this.vli.stax
+
+                  purchases
+          Query --> before calling default, we will query
+          when
+
+          dataModel
+          this.db.user.emailid
+          requried column --> on insert --> _insert
+
+          filter :{ownerid:{$function:{user:{}}}}
+
+          requiredcolumn : _insert
+
+          vli
+              profitecenter : vli._insert, profitecenter
+                  when :
+                      []
+                  profitcenter , return this.profitcenter
+
+                  default : {
+                      when :[{$insert:{vli:purchase}},{$fieldupdate:[profitecenter,{vli:[]}]}]
+                      code : "",
+
+                  }
+
+          vendor : Rohit
+          vouchertype : advance, payment
+
+          advancenestedtable :
+              visible : vouchertype=advance
+              default :
+                  {
+                      when : [{$filedupate:[vendor]},$function:""]
+                      query : {$collection:"",$fields:{}}
+                      code : ""
+
+
+                  }
+          paymentnestdtable
+              visible : vouchertype=payment
+              default
+                  {
+                              when : [{$filedupate:[vendor]}]
+                              query : {$collection:"",$fields:{}}
+                              code : ""
+                  }
+
+
+
+
+
+
+
+      tasks
+          task        estEfforts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  End With Yogesh sir 17-04-14 (datamodel default value)
+
+
+
+  *******12-04-14 with yogesh sir
+  /*
+   Doubts later
+
+
+
+
+          visibillityGrid, visibilityForm --> for nested table, case of invoicel , line item,  purchase details
+          how to commit application and collection
+
+          default values --> how to resolve default value of db in application, who will give this
+          menus structure from server
+              saving is parallel, but required in tree
+          applications --> child application is saved, but we required in parallel
+
+   workbench
+      popup view --> popup view can also work as workbench to manage its views
+
+
+   how to make role in workbench
+      Edit setting in menu bar
+          will have following options --
+              edit app, edit menus, add menu, add role , edit roles, organization, users
+
+   Commit in apps studio
+      Applications : FULL application commit
+          Menus : always be commited with app
+          Roles : always be commited with app
+          We will show a grid of changed application, and can select that collection to commit
+          We will show grid of local db only
+          admin db will be separate for each type of application-->
+
+      Views ????? LATER
+      Collections
+          Fields
+          Triggers
+          QuickViews
+          views
+    We should keep track where some changes in collection and we will show user all the collection where changes are there
+
+
+
+
+
+
+
+   Ammit Singh --> applane db --> Login
+   Create application or edit applicatio link
+          Popup need to open
+          label :"CRM"
+
+  Amit Singh will request for admin database --> it will be hardcode enry manager no ui still
+  __dbs__ --> in admin database, can be do later
+  __applications__
+          [
+              {
+                  _id :"" //auto generate
+                  label :"CRM"    -->
+                  db : "applane"  --> db name where it is getting created --> auto matcially
+                  unique index --> label + db
+              }
+          ]
+
+  Create menu button --> or Edit menu (grid) --> popup --> will be a separate table
+      label          -- unique (join)
+      collection
+      parentmenuid       unique
+      applicationid       unique
+      quickviews : [ ] array of object -- > nested table of qviews
+              if it is empty -- >show all of collection, otherwise show what are saved here
+              index : >> mongo sort at run time
+              qviewselected
+
+      Fields manage --> separate table
+          Add Collection field -- popup form -->
+                  label
+                  field
+                  type : string, fk, object
+                  multple : boolean
+                  ui :  not mandatory
+                  formUI
+                  gridUI
+                  defaultShow : true/false
+                  visibilityGrid
+                  visibilityForm
+                  deaultValue
+                  parentFieldId :
+                  index :
+                  indexForm :
+                  indexGrid :
+
+          address
+          city  --> address
+          state  -->address
+          stree --> address
+          address on grid
+
+          address on form
+          voucherlineitem on grid
+          voucherlineitem of form
+          vli --> grid : off, visibleForm : On
+          uiForm : Grid
+          vli.account : visibleForm : True, visibleGrid : Off
+          vli.debit
+          vli.credit
+          vli.amount
+
+
+      qviews -->
+
+          fields : [
+           {_id:"", visibilityForm:false}
+          ]
+          availableFields : [
+              {}
+          ]
+          hiddenFields : [
+          ]
+
+      userstate : admin or user -> we can show some more controls to admin instead of user
+
+      save view state --> single button afer modifying fields, filter, group etc
+      Add view in quick view --> popup view name
+
+      Toolabr have filter pallate --> two comobo --> one for selection of order/filter/group and anther for colums on which selected operation need to be applied, onselection of column, filter option will be asked simultaneously
+      Filter
+          recursion will be handled from here
+          Account group : Asset and liabity
+              One more button --> cyclic round image -->
+              recursive/cyclic option in fields and user will press recursive image in filter
+      Orders : column selected, button asc | desc
+      Group : column
+          ownerid
+
+
+       Defaults :
+       Mandatory Validation
+       Full text : As it is or check if mongo like
+       Column menu : Second phase
+              Set Filter
+              Set order
+              Set Group
+
+      tasks
+          Ownerid (D)
+          Status  (D)
+          Estimated efforts  (M) | Max | Min | Sum| all can be selected
+          Count (M)
+          To change order , left and right arrow and we will swap the columns
+
+      Actions :
+          Header actions
+              a grid in popup with index, action name and on/off also support for add action
+              insert, delete --> will be shown on
+          Row action
+              view
+                  collection
+                  qviews : [
+                          drop down means FK of qviews
+                      ]
+                  qviewselected
+                  parameters : {"_id":"_countryid_"}
+                  filter {"countryid":"{_countryid_}"}
+              Function
+          on/off
+          childs
+          user defined functions
+          print
+          onRow
+          onHeader
+
+          save
+          delete
+          refresh
+
+      Visibility use case
+          invoices : [
+              invoice_no  gridVisibility : true,  formVisibiliy  :true
+              lineitems : []      gridVisibility : false,  formVisibiliy  :true , formUI : grid
+              purchaseno
+              accountid  (lineitems, flexfield) gridVisibility : false,  formVisibiliy  :true
+              account : object - ui:flexfield, flexColumn : accountid
+                  flexfield is a ui property
+              account.accountid : fk, flexfield
+              customerid -->
+
+
+
+
+          ]
+
+      menu trigger
+
+
+      formoptiions :
+          groups : [
+
+              title:"Person information",
+              noOfColumns : 2,
+              columns : [
+                  {
+                      editablecelltemplate :"<input type='text' ng-model='row.studentName'>"
+                  },
+                  {
+                      collection :"",
+                      displayfields
+                     editablecelltemplate :"<input type='text' ng-model='row.studentName' pl-autocomplete ng-conroller='autocompleteCtrl'>"
+                  }
+
+              ]
+
+
+          ]
+
+
+      visible expression in header actions and row actions
+
+
+  ******************end of 12-04-14
+
+===========================================================
+ gridOptions : {
+        label : "",
+        columns : [{}],
+        ftsColumns:[],
+        filterFields:[]
+        filterInfo:[]              //applied filters
+        sortFields: []
+        sortInfo  :{ fields: [], directions: [] }         //applied orders
+        groupFields: []
+        groupInfo : []         //applied groups
+        groupTemplate :""   //ng-grid calls it aggregateTemplate,
+        checkboxCellTemplate:""
+        selectable :false
+        checkboxHeaderTemplate,
+        data : [], or label evalue to array of data
+        editable
+        reordering : true   //column re ordering
+        rowDraggable : true,false
+        rowTemplate :"",
+        headerRowTemplate:""
+        pagingOptions :{ pageSize: 250, totalServerItems: 0, currentPage: 1 }
+        selectedItems : []  //selected rows,
+        onRowSelection  :"fn name",
+        onCellSelection : "fn name"
+        save : {label:"",image:"",callback:"",template:"" }/false
+        close :{label:"",image:"",callback},
+        resize : {callback:""}
+        refresh :{}
+        rowButton:[{label:"",callback:""}]
+        headerButtons:[{label:"",image:"",callback:"",template:""}],
+        quickViews : []  --------------------------------------------------------
+        breadCrumb:{items:[],callback}
+        collection :""
+
+        serverURL ????????????????????
+
+    }

@@ -1,0 +1,133 @@
+!---------Doubt--WITH PAWAN--------!
+use of domain in each request
+mongo 2.6 --> Role privilieges
+ashu :
+!----------------------------------!
+
+If new record is getting saved in table and their is index defined on collection, then ensure index on that collection
+Amit sir requirement
+    Data Entry from applane website into crm : Need to discuss with Yogesh Sir
+    Meta data Definition : Local and admin db merging , : Need to discuss with Amit Sir
+    Speed : Will check on priority
+    date and Time issue : Need to discuss
+    Column Size : Provided, will check issue
+    Default Value : Impl In progress
+    Save data in File - Txt : 27-05-2014
+    Auto Save : Provided, will check issue
+    Dash Bord : Not designed
+    CRON JOB :    27-05-2014
+    Page Rank /CURRENCY RATE : Provided
+    Delivery - Quantity - Unit Type : 23-05-2014
+    Two Level Nested - Other Addition Deletion in Invoice - 23-05-2014
+    Composite Lookup : 27-05-2014
+    Schedule Date : Client side 23-05-2014, Server side : Not designed
+    Time Column : Provided
+    Export to Excel : Not designed
+    Print in HTML : Not designed
+    export to PDF : Not designed
+    Server UP Guarantee : Need to check/discuss
+
+
+FK should be reference
+Logs should be maintained
+
+How to save data from applane website into crm --> login is required ???
+Local and admin db
+    !!Every db have its shadow db for developer, developer may have right or not to develop in main db but can do development in shadow db
+    DB should be freezed state after development, instead of run time merging we can make a copy
+    Run time merging should not be done, when some changes are done in local db, it should be completed saved, we need to keep difference, so that in future when new column is added, then they can be merged
+convertToJSON -- > toJSON (in document)
+
+
+
+
+setTimeout in domain :
+  		If user has done some infinite loop, then it can not be done,domain dispose can do it
+  		Test example of using worker in heroku
+How to use connection pooling, reconnect
+
+How to apply unique constraint on pl.dbs collection maintained to keep all registered local db in admindb : was assigned to rajit
+
+Async module for saving
+    >> Manjeet (2 days)
+
+
+autoinc
+default value
+Learning angular by 50 examples you tube: angular js video -- yammer share : Pending
+Synth : New framework for angular js and nodejs >> Pre loaded data
+
+
+Query Job and saved query support
+
+Nested table exposed outside
+
+UniqueIndex and query index and with assuming local and admin db --> some method in collection to synch index on all localdb
+    >>> Time estimate pending
+Change of column multiple to single, single to multiple -> mongo level issue -- change data in mongo, if object to array, convery in array, if array to object --> keep first object, throw error until it done
+    >>> time estimate pending
+Cascade
+    >>> Self Design and do it verify from yogesh sir
+Replicate module when column definiton get changed --> new set fields get added or removed
+    >>> Self Design and do it verify from yogesh sir
+
+
+
+
+
+
+Domain explore using some error, timeout, whether it can be replacement of child process, Assign to ashu
+Cron : Assign to ashu
+
+
+
+
+UDT --> Unit, Schedule,handling of orders and filter in udt
+
+FlexField
+RoleModule
+Footer aggregate and Total Row count
+SelfRecursiveModule For Saving ???
+MailSending - Mail Scheduling
+
+
+Run as separate child process
+Time limit on update/query/trigger --> child process
+Audit trail
+FileModule --> remove fileds, gzip should be a separate module, etc.....
+New Module definition as plugin
+AggregateIndex,
+
+
+
+!!Support of recursion in group by, from task table, group by on assignto and recursive:true
+!!documet clone and qury clone are in modulemanager and are done irrespective of that module is required or not
+!!Child vs nested array as fk
+!!db.getLastErrorObj()
+!!Load testing
+
+
+======================DONE====================================
+collection names should be pl.users, pl.collections etc...
+Local and admin db saving  :3 days
+    !!(only required value or complete replicate the admin db to replicate)(case when some thing change in admin db how will we synch it to localbd using replicatemodule)
+Local and admin db merging/query   : 3 days
+
+Support __modules__:{module1:1 OR module:0} in query and updates :  >>sachin >> 2 hrs - 02-05-14
+Support to cancel updates for merging between local and admin db requirement: >>Sachin>>3 hrs   - 02-05-14
+Support in module for document clone or updated document, required in trigger : >> sachin >> 2 hrs        - 02-05-14
+
+Trigger to be run as module (TriggerAsModule-Server)
+    >>>Manjeet ( 2 hrs) 24-04-2014
+File upload
+    >>Ashu (8 hrs) 24-04-14)
+Required column in Trigger
+    >>Manjeet (24-04-14))
+Replicate module
+    >>Sachin(24-04-24)
+(ModuleManagerRequire-Server) -- support of require, update and query may have separate sequence execution, document cloning
+    >>> Manjeet (6 hrs)(24-04-2014)
+Child module (ChildModule-Server)
+    >>Sachin (20 hrs) ,(26-04-14)
+Remove of body parser
+    >>Ashu

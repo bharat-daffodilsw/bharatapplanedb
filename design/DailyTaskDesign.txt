@@ -1,0 +1,106 @@
+====05-05-14====
+Rohit
+		Week Sprint planning
+		Design of commit application and then get it done from Ashu
+		    Function for getting collection name where changed : Ashu (8 hrs)
+		    Commit method : Sachin (8 hrs)
+		Design of collection name change --> '__' should be replaced with "pl."
+		    Sachin : 4 hrs
+		Design of _id as object id of mongo  and will be assigned to Ashu : 24 hrs
+		    Update:
+		    Query: Ashu :
+		Design of default value and will be assigned to Manjeet
+		Design of auto inc and will be assigned to Sahin/Ashu
+
+		Learning angular by 50 examples you tube: angular js video -- yammer share
+
+>>>>Design of collection name change --> '__' should be replaced with "pl."
+    Need to change in DB, client side, test cases, collection definition, Need to inform wfparties
+>>>>Design of _id as object id of mongo  and will be assigned to Sachin
+    Query
+        Find time/date info from obejectid field
+        _id :""
+            if it is objectid, do nothing
+            if it is string --> try to cast it in objectid, if error do nothing otherwise it is objectid now
+            key==_id or ends with ._id
+            cases
+                Array in
+                _id
+                Fk
+                And
+                OR
+                Group query with match or having filter
+                Pipeline
+    Saving
+        __id of self in collection and array (datatype), users in db --> new objectid
+        FK --> No issue
+        Test cases to ensure objectid if _id not passed
+
+
+
+
+>>>>Commit application :
+    get changed collection
+        one function for getting all application names where something changed, fields, actions or collection ,
+    commit application
+        collections
+        actions
+        fields -->
+            __insert__ --> insert
+            __delete__ --> delete
+            update --> if value is obejct then it should be moved to $set
+            array -->
+                insert --> array insert
+                update --> array update with $set
+                delete --> array delete
+
+
+
+Invoke method : header action
+    label :""
+    onHeader  :true
+    type :"invoke"
+    fields : [ {}, {}]
+    functionName :""
+
+
+
+
+====01-05-14====
+    users
+        totalscore
+        artistid
+    top 5 total score
+
+    pass parameters
+        _id
+        no of user whose score is greater that this user
+
+        /rest/invoke?function="userScore"&token="xxxxx121212"&parameters=["a","b"]
+                                 a,b,db,callback
+                                 db.user
+
+
+
+
+====26-04-14====
+Rohit
+    >> level data design
+        >>>discussed with yogesh sir
+    >> Client side form checking so that they can be used for data feeding
+Sachin
+    >> Child saving and query
+Manjeet
+    >> modules, require handling for query and update, adding 1 has issue,need to do some recursion, also circle handling in require
+Ashish
+    >> Filter widget
+    >> Null value in autocomplete
+    >>Binding of multple autocomplete
+Naveen
+    >> File upload
+Ashu
+    >> Remove bodyparser
+    >> Remove cookie parser
+    >> process.cwd(), and required("some cusom module using cwd") on heroku
+
+====26-04-14====

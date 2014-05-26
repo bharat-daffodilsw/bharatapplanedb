@@ -1,0 +1,2079 @@
+Logs maintain
+DataPorting from mysql
+addToOnCommitQueue -- perform operation when tx is going to commit -Server
+Indexes (index,unique index server)
+Role Management(rolemanagement-server)
+Sort option in Array insert (ArraySort--Server - Update)
+Local and admin db merging validation for duplicate data manual trigger
+FieldsTriggerValidation
+Child in client side (Child-client) for saving deliveries along with orders
+Commit Application (Commit application - Client)
+Only one array support (ArraySupport:Server)
+Default value in datamodel same in client and server(TriggerEvents-Client-Server)(01-05-2014)
+Fields on/off in client side(01-05-2014)
+Group grid : {groupgrid-Angular}
+Filterwidget : Handling of filter and sorting in angular : (FW-Angular)
+Two phase commit: Tx management (TPC-Server)
+ChildModule:(ChildModule-Server) (!!Order-->Deliveries case when delivery is saved on another table)
+Required column in triggers - (RCTrigger-Server)
+Replicate Saving - (ReplicateModule-Server)
+Local and Admin DB Merging at query level (local and admin db merging-Server)
+Add row actions design(Row Action Angularjs)
+
+=======================Logs maintain===========================
+Rohit 22-05-2014
+DB
+    Logger will be creted as a new instance
+    when connected :
+    writeLog
+        {logs:[],warnings:[]} --> push
+        Query
+        Update
+    pl.logs :
+        logged in userid
+        uri
+        date
+        logs
+            type : query/update
+            query
+            update
+            startTime
+            endTime
+            totalTime
+        remove logs object
+
+        >> save in pl.logs
+        >> will be maintained for http call only
+        >> Logs should be write to database only after repsone has been send to client
+        >> Logs should include time of gzip response
+
+        uri
+        token
+        startTime
+        endTime
+        totalTime
+        username
+        logs
+            type : qurey/update/invoke/mongoquery/mongoupdate
+            log : query,update, functionName with parameters
+            startTime
+            endTime
+            totalTime
+
+
+
+
+
+
+When connect is done we make a new logger each time
+=======================DataPorting from mysql===========================
+Amit Sir and Rohit 20-05-2014
+    employee        direct_reporting_to : []        emailid
+
+    Rohit           Yogesh, Amit
+    Amit            Yogesh , Nitin
+    Nitin           Yogesh
+    Kapil           Amit
+    Abhishek        Sachin, Yogesh
+    Sachin          Yogesh
+    Yogesh          Null
+
+    {name:"Rohit", direct_reporting_to:[
+        {$query:{emailid:"yogesh@daffodilsw.com"},$set:{name:"Yogesh"}},
+        {$query:{emailid:"amit@daffodilsw.com"},$set:{name:"Amit"}}]}
+
+
+
+=======================addToOnCommitQueue -- perform operation when tx is going to commit -Server=========
+Manjeet, Rohit 20-05-2014
+pl.asyncqueue
+    txid
+    operation --> as a string --> db.batchUpdate
+
+    DB
+        addToOnCommitQueue (operation)
+            make a new entry in table pl.asyncqueue with tx, status : pending
+             error throw if db is not tx enabled means tx is not started
+
+     when tx rollback --> remove all operation
+     when tx commit --> change status : commit
+     return tx, db.processOnCommitQueue
+ db.processOnCommitQueue
+    get operation where status=commiting -- execute, remove
+
+
+    onServerStartup
+        get All Dbs --> create their instance --> processOnCommitQueue
+
+test case
+
+
+=======================Indexes (index,unique index server)================================================
+Manjeet and Rohit 16-05-2014
+
+{name:1}
+{address.name:1}
+
+{name:1,"date":-1}
+
+
+pl.indexes
+
+name : name of index
+collectionid : fk of collection
+unique : boolean
+field : "" : string
+multikey : boolean
+
+fields : [
+	key  value
+]
+
+
+insert --> ensure index
+delete -> remove index
+update --> old index remove, new index ensure
+
+20-05
+When there is no record in tbale, and insert is come, we have to ensure index on that table --> unique index
+admin db --> pl.dbs --> will contain dbs name --> will be saved from db.connect method when new db is going to connect
+when index is updated --> update it in all dbs registered in admin
+
+
+=======================Role Management(rolemanagement-server)===========================
+Filter
+Editable : Field, View, Collection
+Field Remove
+Remove action/function
+Role in Query
+
+Fields
+    if no field defined then put 0 of not accessed field
+    if field is defined then remove the fields from query
+    if user have set 0 in fields, then we will also add 0
+Filter
+
+
+
+
+
+
+
+
+=======================Column drag and drop=============================================
+column dragging
+	gridOptions : columns
+		pl.grid >> gridColumns
+
+
+	gridController
+		-->
+	pl.view -->
+		source and Target
+
+		{_id:"",index : 100}  --> Source
+		{_id:"",index : 50}  --> Target
+		if (sourceIndex > targetIndex){
+		    get Index of targetColumns
+		    if not found --> sourceColumn.index = targetColumn.index-100;
+		    if found {
+		             var preTarget = (target column  -1)
+		             sourceColumn.index = (preTarget.index + target.index)/2
+		    }
+
+		}else if (sourceIndex < targetIndex){
+		    //reverse condition
+		    if last, +100
+		    other wise get next of target and (postTarget.index + target.index)/2
+		}else {
+
+		}
+=====================Sort option in Array insert (ArraySort--Server - Update)=============
+Manjeet
+Rohit
+10-05-2014
+
+default : _id
+
+followerCount :
+
+tables
+    users : [ { name:"", followers :[{name:"",likes:10}]}]
+
+    $sort =
+
+    Array Module
+        -->
+        updates, oldValue, requiredValue, type
+        updates : [ { name:"", followers :[{name:"",likes:10}]}]
+
+
+
+
+
+
+==========================Local and admin db merging validation for duplicate data manual trigger======================
+    08-05-2014
+    First simple query
+    Then fetch all data with admin and local merging and check manual filter
+    Ashu : 16 hrs
+
+==========================FieldsTriggerValidation====================================================
+07-05-2014
+recursion query
+
+
+{$collection :"__fields__", $filter:{collectionid:"statess",parentfieldid:null},$recusion:{parentfieldid:"_id",$alias:"fields"}}
+
+city : string
+stateid  :fk
+	displayField : state
+	set : [state, code, profile.name, profile.code, countryid.country, countryid.continentid.continent]
+
+
+
+state
+code
+countryid : fk
+profile : object
+	code  : profile
+	name : profile
+
+
+country
+code
+contientid
+
+
+
+continents
+	continent
+	code
+
+
+===================Child in client side (Child-client) for saving deliveries along with orders=============
+07-05-2014
+    Add child in collection, it will be as nested table
+        alias
+        collection
+        fk
+        query
+
+
+
+====================Commit Application (Commit application - Client)=======================================
+07-05-2014
+    menus
+    applications
+    collections
+        fields
+        actions
+        childs
+        formgroups
+        qviews
+
+    commit : true
+        parameter, db, callback
+            parameter : commit : true, collection : [_id of collections]
+    testcase
+        tx enabled and if error should be roll back
+
+     __type__ : insert --> $insert , unset __type__
+     __type__ : delete --> remove
+     Update
+        simple
+            null, unset
+            $set
+        object,  address
+            $set :{address : {$set:{}}}
+        array : one level
+            insert --> simple
+            delete -- > simple
+            update
+
+
+
+
+=====================ArraySupport:Server=======================================
+07-05
+
+    parentExp
+        object
+        array
+            for loop
+                for each row
+                    call same function with parent exp
+
+    parentexp==qExp
+        qexp_id
+        targetRef = {}, [],, currentRecor[]
+
+        hasChanged =
+        if(hasChanged){
+
+        }
+
+    address.states.$.info.cities.$.
+
+    address.states._id
+            address.states.$.info :
+
+
+
+    info
+
+    query part
+
+        address.states._id,   : "address.states"
+
+        to set :
+            address.states.$.info
+
+
+
+
+$query : states.cities.city : hisar
+        $set  :states.$.cities.$.city : "New hisar" , states.$.cities.$.code : "12345", states.$.cities.$.address.line1:10  ,states.state
+         --> {city:"",code:"",address.lin1:"",}
+        $unset : states.$.cities.$.city : "1"
+
+        country:"india", states:[
+                {_id:"haryana",state:"haryana",cities:[{_id:"hisar",city:hisar},{_id:"hisar",city:hansi}]}
+                {_id:"punjab",state:"haryana",cities:[{city:"newhansi"},{_id:"hisar",city:hisar}]}
+                {_id:"up",state:"haryana",cities:[]}
+            ]
+
+    _id:"india", address.states._id:"haryana", $set :{"address.states.$.info":{}}
+
+
+03-05-2014
+Rohit & Manjeet
+
+!! countries --> states --> cities
+    >> now how to get document of cities --> is it single or multiple
+    >>
+
+
+tasks :
+    task:""
+    progress : [
+
+            {
+                date :"", progress:"", effort :""
+            }
+            }
+        ]            insert, update, delete
+
+        comments : []  set --> insert, update, delete Error, Only set as whole is allowed
+            owners : []    set
+
+            var updates  ={_id:"task1", $set:{task:"my task",progerss:{$update:{_id:"p1",$set:{effort:10,progree:"dd"}},$insert:[],$delete:[]}}}
+
+            var mongoRequiredUdat = query = {_id:"task1",progerss._id:"p1"}, updates  :{$set:{progerss.$.effort : 10}}
+
+            no of op = 1 for simple
+              For each array -->
+                one for all insert
+                one for all delete
+                each for no of updates
+
+        var countries : {country:"india",code:"91",states : [{state:"haryana",code:"10",cities: [{city:"hisar",code:"1662"}]}],
+                    languages:[ {language:"hindi", schools : 10 },{language:"english",school:20}]
+                    }
+
+        var mongoUpdate = Same --> Single
+
+
+        var countries : {country:"india",code:"91",states :{$insret: [{state:"haryana",code:"10",cities: [{city:"hisar",code:"1662"}]}]}}
+
+                var mongoUpdate = Same --> Single
+
+            var updats = {$id:"india",$set:{
+                    code:"+91",
+                    states:{$insert:[],$dete:[],$update:[{
+                        _id:"haryana",$set:{code:"9110",state:"Haryana"}},{_id:"up",$set:{code:"9111",state:"UP"}}]
+                        },
+                    languages : {$insert:[],$update:[{_id:"hindi",$set:{school:25}}],$delete:[]}
+                    }}
+            var mongo1 = {_id:"india"} {$set:{code:+91}}
+            var mongo2 = {_id:"india"} {$push:{states:{$each:[]}}}
+            var mongo3 = {_id:"india",states._id:"haryana"} {$set:{states.$.code:"",states.$.state:""}}
+            var mongo4 = {_id:"india",states._id:"UP"} {$set:{states.$.code:"",states.$.state:""}}
+            var mongo5 = {_id:"india",languages._id:"hindi"} {$set:{languges.$.school:""
+            }}
+
+
+
+           var count = {country:"india",states:[{state:"haryana",cities:[{city:"hansi",personid:{_id:"",person:""}}]}]}
+
+           country.states.cities.personid._id:"rohit"
+           {$set:{states.$.cities.$.personid.person :"RK"}}
+
+
+
+
+           doc
+           updated field
+           $set, $unset, $inc
+
+           languages
+                insert --> push
+                update,
+                    array
+                        operations
+                            set, unsert, inc
+
+
+                delete --> pull
+
+           states
+
+           handleArray
+                insert
+                delete
+                update : []
+
+            handleArrayDocument {document, parentExp}
+                updateFeilds
+                    simple
+                    set
+                    unset
+                    inc
+
+                    object --> handleArrayDocument (set, unset, inc)
+
+                     array (cities_
+                        insert
+                        update,
+                        delete
+                        noChange
+                        make array : []
+                            insert.converJSON
+                            var cloneDoc = new Doc()
+
+                var cities  :[{city:"hansi"},{city:"hisar"},{city:"sirsa"},{city:"bhiwani"}]
+                var updates : {$insert:[{city:"rohtak"}], $update:[{city:"bhiwani"},{city:"hansi"}],$delete:[hisar]}
+
+                 var docs : [ {hansi, tye:update},{hisar, delet},{sirsa, nochnage},{bhiwani, update},{rohtak, insert} ]
+
+
+
+
+
+
+
+
+
+
+=====================datamodel query at srver for grid and form=======================================
+
+grid, form
+
+{name:"Rohit",fname":"Sh Narender Kumar",age:31,address:{line1:"Sector 14",city:{cityName:"Hisar",state:{stateName:"Haryana"}}}}
+{age:1,fnmae:1,}
+
+grid
+visibilityGrid : true,visibilityForm : true
+visibilityGrid : false,visibilityForm : true
+visibilityGrid : true,visibilityForm : false
+visibilityGrid : false,visibilityForm : false
+
+fields : [
+    {field:"name",visibilityGrid : true,visibilityForm : true},
+    {field:"fname",visibilityGrid : false,visibilityForm : true},
+    {field:"age",visibilityGrid : true,visibilityForm : false},
+    {field:"code",visibilityGrid : false,visibilityForm : false},
+    {field:"address", visibilityGrid : false,visibilityForm : true, fields:[
+        {field:"line",visibilityGrid : false,visibilityForm : true},
+        {field:"city",visibilityGrid : true,visibilityForm : false,fields:[
+            {field:"cityName",visibilityGrid : false,visibilityForm : true}
+            {field:"state",visibilityGrid : false,visibilityForm : false,fields:[
+                {field:"stateName",visibilityGrid : true,visibilityForm : true}
+            ]}
+        ]},
+    ]},
+    {field:"paddress", visibilityGrid : false,visibilityForm : true, fields:[
+            {field:"line",visibilityGrid : false,visibilityForm : false},
+            {field:"city",visibilityGrid : false,visibilityForm : false,fields:[ ]},
+        ]},
+]
+
+{address:1,"address.city":1} -- X
+address
+address.city
+
+
+===============**************====================
+Objectid at client side
+
+http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-app
+
+
+==============****Default value in datamodel(TriggerEvents-Client-Server)**********====================
+
+***************23-05**************
+    modules
+        fk -- module
+
+        event :"onValue"  onInsert, onSave
+
+        {cost:"100",qty:"200"} --> {cost:100,qty:200, amount:"2000"}
+        {$query{_id:"india"}} --> {_id:"india",}
+        cost, qty
+
+        fields :
+
+        type :"fk"
+
+        type :"number"
+
+
+***************21-05**************
+{"result":[{"invoice_no":1111,"profitcenterid":{"_id":"Services","profitcenter":"Services"},"invoicelineitems":[{"lineitemno":1,"amount":{"amount":10000,"type":{"_id":"INR","currency":"INR"}},"other_deductions":[{"deduction_amt":{"amount":200,"type":{"_id":"INR","currency":"INR"}},"profitcenterid":{"_id":"Services","profitcenter":"Services"}}],"profitcenterid":{"_id":"Services","profitcenter":"Services"},"service_tax_amt":{"amount":1000,"type":{"_id":"INR","currency":"INR"}},"net_amt":{"amount":9000,"type":{"_id":"INR","currency":"INR"}}}],"total_invoice_amt":{"amount":20000,"type":{"_id":"INR","currency":"INR"}},"total_service_tax_amt":{"amount":2000,"type":{"_id":"INR","currency":"INR"}},"_id":"537c532fe73e8fcc1e0bc903"}]}
+
+{$insert:[{_id__temp :"",number:1}]} --> {$insert:[{number:1}]}
+
+invoicelineitems :
+	10000
+
+	getDocuments : {}
+
+updates --> _id
+initially -->
+tempids -->
+
+		[{_id:"line1", amount:100, servicetax:10}] , [{_id:"line1", amount:100}]
+
+		updatedField,
+
+		invoicelineitems
+			documnet.updates
+			oldrecords
+		newvalue, 	oldValue
+		[]{$insert:[],$delete:[],$update:[]}		--  null OR [{},{}]  OR  {$insert:[],$delete:[],$update:[]}
+
+		if(!oldvalue){
+		    [], {$insert:[]} --> documents : [{},{}], [insert,update,deltete, nochange]
+		}else{
+		    if(override){
+		        //dome some thing else
+		    }else{
+
+		        $insert
+		        $update --> {$query:{} OR : _id}
+		        $delete --> {} --> query  and may have _id presence or not
+
+		         now old value :
+		            [ ] OR {$insert:[],$update:[],$delete:[]}
+
+                    sequence --> near to old
+
+
+
+		    }
+		}
+***************end of 21-05=********
+    orders
+        deliveries
+
+    deliveries
+        orderid
+
+    delivery -- >amount, should be updated in orders
+    order's profit center --> deliveries
+
+
+
+
+
+
+
+15-05-2014
+    !!! Ordres and deliveries -->
+        --> if we depends on delivery amt change, then if order is new, and delivery are saved in nested table, then we do not have order_id
+        --> also how to update profit center of delivery as same as order_id
+    Default Value :
+    			Test case for : Nested table aggreate in main record (Invoice-->Line items total)
+    			Test case for : Two level Nested table aggreate in main record (Invoice (TotalAmt, TotalTax, NetAmt)-->Line items (Amt,TaxAmt, Net Amt) -->Taxes(taxAmt))
+    			Test case for : Invoice Profiter --> Line items profit center (New Lineitem should have same profit center and if profit center updated in top, then line item should be updated)
+    			Test case for --> Invoice --> Vendor change --> Select all Deliveries, Again vendor then previous should be removed
+
+    			Orders
+    				profit center
+    				order_no
+    				vendor_id
+    				currency : USD
+    				total_amt : currency
+    				totalConverted_amt  (INR) -->
+    			Deliveries
+    				profit center --> order profit center
+    				order_id
+    				vendor_id
+    				delivery_no
+    				qty : normal
+    				rate  : normal
+    				amount --> qty * rate --> when amount changed, update order with incremental update
+
+    			Updates --> With Order (delivery as child) and also with Delivery (delivery as independent and order_id will be selected)
+
+    			Vendor
+    			    vendor
+    			    accoount
+    			    srevice_tax : 10, 20, undefined
+    			Invoices
+    			    profit_center
+    			    invoice_no
+    			    vendor_id
+    			    total_invoice_amt  : sum of lineitem.amount
+    			    total serviceTax   : sum of lineitem.servicetax
+    			    totalotherDeduction: sum of lineitem.total_other_deductions_amt
+    			    netAmt : sum of lineitem.netAmt
+
+
+    			    LineItems : [
+    			        profit_center : invoice profit center
+    			        delivery_id
+    			        amount --> delivery_id
+    			        service_tax --> on the basis of vendor
+    			        total_other_deductions_amt : total of other_Deductions.deduction_amt
+    			        netAmt -- amount - service_tax - total_other_deductions_amt
+    			        other_Deductions : [
+    			            deduction_type : string
+    			            deduction_amt : Currency
+
+    			        ]
+
+    			    ]
+
+    			    Save voucher on invoice create
+    			    Update invoice --> Voucher should be updated
+
+
+                Accounts
+                    account
+                    balance
+    			Voucher
+    			    voucher_date : new Date() as default
+    			    voucher_no
+    			    line items
+    			        account
+    			        debit
+    			        credit
+    			        amount
+                Validtion : total of debit = total of credit : onSave : pre (Client, Server)
+                Manage Aggregate of accounts  : onSave : post
+
+
+
+12-05-2014
+    !! Do we need to resolve required value at server (invoicelineitems.delivery.product.account) --> test case how will user find these
+    !! Client JS Load
+    !! resolve server require variable at client side
+    !! how to synch updates whe delivery will update some value in orderid
+    !! $inc will be keep at client and need to be updated if required
+    !! transient value support
+    !! can we move child updates to transient (deliveris of order will be transient then we don;t need for document cloning)
+    !! oldValue will be passed from client, conversion is required for them, date, objectid etc....
+    !! when did tx module will work, onSave, but valueChange get fired from onSave (some fk get set in trigger) --> then ????
+    !! tx module required oldValue not updated value, should it be like, onSave, server:true
+    !! Function loading --> employees.getFirstName will be written in trigger evetns and should be able to call getFirstName of employees
+    !! nested approach or serial approach
+
+
+
+
+    onValue --> onInsert
+    onValue : [{"vlis":[ ]}]  --> onVli Insert
+    onValue : ["voucherno"]  --> onValue change of voucherno
+    onValue : [{"vlis":["amount"]}]  --> onValue change of amount in vli, voucher will be as parent in doc, doc will be of one vli
+    onSave , pre:true, server:true
+    onSave , post:true
+    onValue --> type:"fk"
+    onSave , pre:true, server:true, oldValue will not be consider
+    when client to server, old Value will be passed, updated value will become oldValue and will be used
+    onSave : post, only at server and oldValue will be original oldValue not updated old value
+
+    onSave --> can update some values --> onValue will be triggered for them,
+    onSave will be called only once
+    onSave can be synch or not, (only for post:true)
+
+    Child module will work in onSave
+    FK module --> setFields, will work onValueChange for type
+    Trigger module --> will fire onValueChange of trigger, onSave of trigger, onSave (post) of trigger
+
+
+    >> updates, oldValue, transientValues
+        >>> prepare a doc
+        >>> get UpdatedFields
+        >>> call documents
+
+       clone of documents will not be passed in onValueChange
+       >>> while firing onValueChange, if some value getChanged, it will be fired again, but if value is changed in same field then we will not trigger event again
+            >>> fk module , set some value in same object
+            >>> udt module >> keeep converted values
+            >>> array module --> keep _id
+            >>> date module --> instance of date
+            case1 --> if change are in array, it should be trigger, from client, insert, update and delete, and from trigger, one more insert and it contains fk and array get override
+            case 2 --> row inserted,
+
+
+            voucherlineitems
+                account : cash
+                accountgroup : account.accountGroup -> _id:""
+
+
+
+        onValueChange
+
+            state
+                countryid : fk (_id:"india")
+
+
+            fk module
+                (_id:"india") --> {_id:"india", code:91}
+            triger countryid change
+
+
+
+            trigger
+
+            t1 voucher : 1000 --> amoount : 1100
+            t1
+
+
+            rate  :100
+            qty : 50
+            amount : 5000 --> 6000
+
+            v1 :
+            v2
+            v3
+
+
+
+
+            rate,qty in insert --> we will fire value change for rate and qty --> amount will be calcualte two times
+            rate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+08-05-2014
+        >>>>Filter --> Month : , Account in nesed table --> Populate Salary
+        >>>> syntax for client and sever differentiate
+
+        >>>> use case for before insert/update and db.saving ????
+
+        >>>>> order and delivery case need to be discussed with amit sir
+        >>>>relationship validation need to be discussed
+
+        >>>> entity--> Select, name, emaiid and any other should be auto fetched, like vendor select -> accountid should be auto fetched
+        >> Debit and Crdit should be equal --> when to resolve this validation, before Save, as it on value change then always error
+        >> Attendance --> Update Marks as Extra working --> Some validation, if reolve at client then overhead will be there
+        >> Invokce --> Voucher wil be save from job after, then vouche logic will be run at server, so we required both logic
+        >> Punching --> Some value are calcute in Punching Data Service --> Attendance Update --> Re Validate , when things are already validated, how to resovel, previously some transient column were used for this, so they in trigger they skip validation on this basis
+        >> Invoice --> AFter --> Voucher save, then voucherid will be saved in invoice, invoice update, then do some update on delivery on some fields, it is not required from here
+
+       >>Delivery can be created independently and can be created via orders as child
+       >>Delivery need to update Orders total amt
+       >> voucher  will be created from UI as well as server from invoice
+
+
+
+
+
+
+
+
+01-05-2014
+!! How to add JS file to client side if they are in different files
+!! IF same js need to be written, then exports need to be understood by clietn side as it is nodejs term
+collections
+    require : employees
+    triggers
+
+        event   js function / functionname
+        error object need to be pass
+
+
+        event           function
+        value:[fname]   employee.fname/fname
+        value:[lanme]
+
+        __functions__
+            jsfile
+            employee
+>> attach JS at client side
+>> De attach JS at client side
+>> If one view is open and then in layer anohter view open >> and second view is of same type --> then whether two times listener added or not ?
+>> Support of value:["amout",{vli:[name]}]
+
+==============****Fields on/off in client side**********===============================================
+01-05-2014
+fields : [
+
+    visibilityGrid || visibility
+    visibilityForm || visibility
+
+    visibility : true
+
+    visibility : false
+
+
+
+    {field:"employee","ui":"text",label:"Employee"},
+    {field:"address","ui":"object",type:"object", label:"Address",visibility:false,
+            fields:[
+                {field:"line1",label:"Line1",visibility:true,ui:"text"},
+                {field:"line2",label:"Line2",visibility:true,ui:"text"}
+            ]
+    }
+
+    address :{line1:"Secto14",line2:"Hiasr"}
+]
+
+==============****Add row actions design(Row Action Angularjs)**********=====================
+    __actions__
+
+            label :   string
+            type :"view" | print | pdf  | excel : string
+            row : true, boolean
+            header :true       boolean
+            collection --> child collection --> string :
+            defaultqview : fk
+            qviews : [ ] : grid  ui, type
+            collectionid : fk
+            filter  :{} : object
+                $parameters : {emplyeeid:"12345"}
+                $filter:{_id:"$employeeid"}
+            parameters :{employeeid:"$id"} : object
+
+            then a trigger need to be written on this rowactions --> it will invoke menus table for this
+        >> collection table trigger --> name can not be changed
+        Client side --> pass parameters
+
+
+
+application overviews
+    __users__ : user details
+    __applications__ : task space, hr portal,
+    __menus__
+    __collections__
+    __fields__
+
+
+
+
+
+==============****Grid rendering as ng-grid**********=====================
+data:
+    [{name:"rohit",age:20,__deleted__:true},{name:"ashish",age:19},{__insert:true}]
+renderedRows :
+
+            [
+
+                {entity:{name:"rohit",age:20},dataRow:0,__selected:true},
+
+                {entity:{name:"ashish",age:19},dataRow:1}
+
+        ]
+
+
+
+    insert case
+    [{name:"rohit",age:20},{name:"ashish",age:19},{name:"Naveen"}]
+    [{entity:{},dataRow:2},{dataRow:0},{dataRow:1}]
+
+    [{name:"rohit",age:20},{name:"ashish",age:19,__delete:__:true},{name:"Naveen"},{name:"ashu"}]
+
+    [{name:"rohit",age:20,index:3},{name:"ashish",age:19,index:2},{name:"Naveen"},{name:"ashu"}]
+    [{dataRow:0},{dataRow:1},{dataRow:2},{dataRow:3}]
+
+
+    []
+
+
+      data: [
+             {owner:"rohit",count:5,estimatedefforts:20,children:[
+                 {staus:"completed",count:2,estimatedeffor:10, children:[
+                 ]}
+                 {staus:"new",count:3,estimatedeffor:10}
+             ]},
+              {owner:"asshish",count:5,estimatedefforts:20,children:[
+                              {staus:"completed",count:2,estimatedeffor:10, children:[
+                              ]}
+                              {staus:"new",count:3,estimatedeffor:10}
+              ]}
+
+         ]
+        groups : [{},{}]
+
+        renderedrows  [ {entity:{},groupData:"Rohit Bansal (5)" datarow:0},{entitty:{} dataRow:1}]
+
+
+=================*******Local and Admin DB Merging at query level (local and admin db merging-Server)********=======================
+25-04-14 Rohit Bansal
+     !--doubt--!
+        replicate module, if admin data change, how to synch in local db if status name change by developer
+     !--   -!
+
+     indexes:[
+        {indexName:"uniqueindex", fields:{application:1}, onlyadmin:true, unique:true}
+     ]
+
+     localdb --> two query --> _id basis and actual filter basis, we may also need to fire on admin on the basis of _id in admin
+
+     orderby --> we may need to do in memory for local merging
+
+     when non metadata collectoin --> org admin want to change --> it can be only document:false, and for first time, copy will be made with changes and we will save it in local db
+
+     collection : union --> query on admin, query on local, memory filter, meory order by --> left it now
+     collection : override -->
+     record : union/override
+     field
+
+     collection : union,merge,override
+         union --> filter on admin, _id basis local, filter --> local for new records
+         override --> if data exists in local then serve from local
+     fields
+        override :
+        union --> and filter on field, or sort then throw error  --> exception throw
+
+    unwind query ->
+        {collection:"collections",unwind:["fields"],fields:{field.label,field.type,field.mandatory}}
+        --> collection : merge, field --> fields:union
+
+        admin : {_id:"crm",id:"crm",label:"CRM",public:true}
+        local : {_id:"crm",id:"crm",label:"Sales management"}
+
+        filter:            {label:"Sales management"}
+
+
+
+
+
+
+
+     collection :override, record:override -->
+        global data (non meta data) --> local db have replicated copy if exists
+        if data exists in local --> then serve from local otherwise admin (any filter or not)
+
+     collection :override, record:union  --> main queyr on admin, then onlocal on the basis of _id and then merge records
+
+     field : union/override
+
+     Merging of local and admin db
+
+     Merging of menus : new data can be in local db --> collection : union/override
+
+     collection --> union,override,merge
+     field --> union, override, merge
+
+     override--> if collection has some record then server from local db otherwise query on admin db
+     merge -- query on admindb, query on localdb on the basis of _id query on localdb, filter will be resolved from admin db only
+     union -> query on admindb, query on localdb on the basis of _id, query for new records on localbd, filter will resolved for new records only
+
+     //first we will add new records at last, memory sorting can be done later
+     will be done at end in query engine
+     when query prepares
+        then check record and merge accordingly
+
+
+
+    if current db is admin, then do nothing
+    we will not support group by if merging is enabled, throw error properly
+    We will not support unwind if merging is enabled --throw error
+    We need to support aggregate query in merging is enabled throw error
+
+
+
+     saving --> how will we save only difference of data and how will admin will be able to save complete replicate copy
+
+
+    {collection:"taskstatuses",merge:{collection:"override"}}
+    var status : [{_id:"new",status:"new"},{status:"in progress"}]  --> admin db
+    var localstatus =   {_id:"new",status:"fresh"}
+    var localdb  =[{_id:"new",status:"fresh"},{status:"in progress"}]
+
+
+     Saving
+        !! how to support Tx in this
+        !! replicate module
+        !! indexes
+        !! developer change merge level property --> override -- union or viceversa
+
+        ..requirement
+            >>> support to run query using admindb
+            >>> find support in collection
+        collection
+            >> no merge : do nothing
+            >> collection override
+                >>> get .count query on db
+                    >>>if found at least one record --> then do nothing --> continue operation
+                    >>>if not found --> insert all records with same _id in admin db and then continue the operation
+            >> merge : collection : union
+                >>> insert
+                    >>> __type__ : insert
+                >>> delete
+                    >>>  __type__  :delete
+                >>> update
+                    >>>> _id, $set, $unset, $inc
+                        >>>>$inc --> throw error as we don't hve case now
+                        $unset --> convert to $set with null value
+                        $set
+                        >>> check if _id exists here in localdb --> then update, otherise insert in localbd
+                    array handling
+                        >>> [], $insert, $delete, $update
+                            >>> $insert  :just add
+                            >>> $delete : __delete__  :true
+                            >>> $update --> check if _id in array already in localdb, then set in same otherwise case of insert in array
+                            >>> [] --> throw error, we don;t have support for now, as we don't know usecase for this
+                >> merge : collection : union, field : override
+                    >>>> if field exists in localdb,then just do required update, otherwise, fetch field from admin and then do required changes
+
+
+             query -->
+                merge : false --> do nothing
+                override --> check record exists in localdb from count query, then from local db otherwise from admin
+
+                union -->
+                    query --> admin
+                        get _id from each records
+                        local query on the basis of that _id
+
+                        query --> local and one more filter with __type__:insert
+
+                        sort the sort in memory
+
+
+
+
+               var adminmenus = [{_id:"employee",label:"employee",collection:"employees"},{_id:"task",label:"Task",collection:"tasks"}]
+
+                var udpate = {_id:"employee",$set:{label:"Family"}}
+                            batchupdate --mongo
+                            batchupdatebyid --trigger/module --> trigger X, module -- ==["Tx"]  modules:{tx:1}
+
+
+
+                menus --> trigger
+                    --> (document, db)
+                        --> db.insert()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=================***(Social Login)*****===============================================================================================
+
+__users__
+
+
+
+    username --> login
+    password
+
+{firstname:"Rohit",socialuserid:"1245",type:"twitter"}
+
+username:""
+passwr
+dbcode
+
+mobile :
+
+/rest/connect?db
+/rest/addUser?user={}& dbcode
+
+wfp android app
+    /rest/connect?username=admin&passowrd=admin&db=1245
+    addUser(),
+    connect again user username and dbcode
+applanedb
+
+usreAlreadyExist exception
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=================***(TriggerAsModule-Server)*****==============
+TriggerModule
+    get trigger from collection,
+    callit using db.invokeFunction
+    Assigned to Manjeet (2 hrs)
+
+==================**Module dependencies(ModuleManagerRequire-Server)***=====================
+    It may be separate for query and update
+    Trigger should run using module
+    Child module should run after trigger module
+
+    var modules = [
+        {path: "./modules/Recursion.js"},
+        {path: "./modules/DBRef.js",require:{query:[SubQuery]},
+        {path: "./modules/SubQuery.js"},
+        {path: "./modules/Group.js"},
+        {path: "./modules/Function.js"},
+        {path: "./modules/DataType.js"},
+        {path: "./modules/Replicate.js"}
+        {path: "./modules/Trigger.js", require:{update:["child"]}
+        {path: "./modules/Chilid.js",require:{query:["SubQuery","Recursion","DBRef"],update:"Trigger"}}
+    ];
+
+    We can assign same number to module and then increate number on the basis of require,
+    Document cloning is required at each level
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================**Group grid : {groupgrid-Angular}***
+
+var view = {
+        viewoptions:{
+            ui:"grid",
+            fields:[
+            {field:"task",ui:"text"},
+            {field:"priority",ui:"text"},
+            {field:"assignto",ui:"text"},
+            {field:"status",ui:"text"}
+            ],
+            groupInfo:[
+                {field:"assignto",columns:[{field:"count"},{field:"max"}]},
+                {field:"status",columns:[{field:"count"},{field:"max"}]},
+            ]
+            data:"data"
+
+        },
+        data : [
+        {assignto:"RohitBansal",count:10,max:30,__level__:0,__group__:0},
+        {assignto:"RohitBansal",count:10,max:30,status:"Completed",count:5,max:20,__level__:1,__group__:1},
+        {task:"Rohit completed1",priority:"High",__level__:2},
+        {task:"Rohit completed2,priority:"High",__level__:2},
+        {task:"Rohit completed3",priority:"High",__level__:2},
+        {task:"Rohit completed4",priority:"High",__level__:2},
+        {task:"Rohit completed5",priority:"High",__level__:2},
+        {assignto:"RohitBansal",count:10,max:30,status:"New",count:5,max:30,__level__:1,__group__:1},
+        {task:"Rohit New1",priority:"High",__level__:2},
+        {task:"Rohit New2,priority:"High",__level__:2},
+        {task:"Rohit New3",priority:"High",__level__:2},
+        {task:"Rohit New4",priority:"High",__level__:2},
+        {task:"Rohit New5",priority:"High",__level__:2},
+
+        {assignto:"Ashish",count:5,max:25,__level__:0,__group__:0},
+        {assignto:"Ashish",count:2,max:25,status:"New",__level__:1,__group__:1},
+        {task:"Ashish New1",priority:"High",__level__:2},
+        {task:"Ashish New2",priority:"High",__level__:2},
+
+        {assignto:"Ashish",count:1,max:15,status:"Pending",__level__:1,__group__:1},
+        {task:"Ashish Pending1",priority:"High",__level__:2},
+
+        {assignto:"Ashish",count:2,max:5,status:"Reopen",__level__:1,__group__:1},
+        {task:"Ashish Reopen1",priority:"High",__level__:2},
+        {task:"Ashish Reopen2",priority:"High",__level__:2},
+
+        {assignto:"Naveen",count:5,max:25,__level__:0,__group__:0},
+        {assignto:"Naveen",count:2,max:25,status:"New",__level__:1,__group__:1},
+        {task:"Naveen New1",priority:"High",__level__:2},
+        {task:"Naveen New2",priority:"High",__level__:2},
+
+        {assignto:"Naveen",count:1,max:15,status:"Pending",__level__:1,__group__:1},
+        {task:"Naveen Pending1",priority:"High",__level__:2},
+
+        {assignto:"Naveen",count:2,max:5,status:"Reopen",__level__:1,__group__:1},
+        {task:"Naveen Reopen1",priority:"High",__level__:2},
+        {task:"Naveen Reopen2",priority:"High",__level__:2},
+
+        ]
+}
+
+Row :
+    Background color,
+    Column borde may be on off
+    wordwrap  :false
+    Remove over flow
+    Row  : ng-visible
+
+
+
+==================**Filterwidget : Handling of filter and sorting in angular : FW-Angular***
+pl-view -
+    filterable : true
+    sortable  :true
+    filterInfo --> applied filters
+    sortInfo --> applied sort, ensure with ng-grid
+    add it to filterColumns that will be passed to grid
+    filterColumns
+    sortColumns
+
+    on the basis of
+    auto complete --> Filter,Sort,Group
+    Filter --> another auto complete will be visible on the basis of item selected
+    in that box --> Select on which you want to apply filter, and then ask proper info there
+    Order --> Two images will be there Up and Down
+
+
+    $scope.userPreferenceOptions = options:{filterColumn:[],sortColumns:[],groupColumns:[],filterInfo:[],sortInfo:[]}
+    toolbarooptions : {left:[{},{}],right:[],center:[{template:"<div pl-user-preference='userPreferenceOptions'></div>", }]}
+
+
+    [{label:"Status",groupable:true},{label:"Estd efforts",aggregatable:true},{label:"Assign to",groupable:true},{label:"Total hrs"}]
+    groupColumns : [{label:"status"},{label:"Assignto"}]
+
+    checkbox   status (M)
+    checkbox   assignto (M)
+    checkbox   Estd efforts     checkbox Sum | chekbox Min | chekc boxMax
+    checkbox   Count
+
+
+
+==================**Two phase commit: TPC-Server***
+
+
+Txs
+    simple
+        insert, update, delete
+
+    vouchers
+        vouhcerno
+        vlis : [ ]
+            account
+            amount
+    account
+        account
+        total
+    accountgroups
+        accountgroup
+        total
+
+    vouchers : {
+         voucher_no : "1"
+         vlis : [
+            {account:salary, accountgroup:asset,amount:100},
+            {account:cash, accountgroup:asset,amount:-100},
+         ]
+    }
+
+
+          voucher insert
+          account update for cash with -100
+          account update for salary with 100
+          accountgroup update for asset with 100
+          accountgroup update for asset with -100
+
+
+      vli
+            account : cash
+                --> salary - done, roolback --> cash
+                --> Furnitire -- done --> cash
+
+
+        cash  500    t-1
+        cash    600 rohit (100) t
+        cash    550 yogesh
+
+
+        voucher - insert
+        vli - insert
+        accounttotal
+        accountgrouptotal
+
+
+we will support rollback
+we need to mantain a table in which for tx we need to keep collection and their records reffered, as well as if any thing deleted,
+we need to keep another column pendingtransactions as a field in each table, this def need not to be preserved
+
+insert case --> we need to keep collection name and insert record _id in transactions table
+    if we need to rollback, just remove this _id from concerned table
+Update case --> we need to keep reverse effect in same table
+    cases
+        vouchers insert and we need to update account total and account group total assuming vli as nested array
+
+            voucher updates -->
+                {voucher_no:120,vlis:{insert:[],update:[],delete:[]}}
+
+            for $inc --> keep $inc with X-1
+            for set --> keep old value
+            for unset, keep oldValue
+            for array
+                [ ] -- We need to keep old Value
+                $insert --> We need to keep track of inserted _ids
+                $update --> we need to keep above thing as recursion
+                $delete --> we need to keep complete row and it wil be used as $set
+
+
+
+delete case --> we need to keep complete object in transaction table
+
+test case, if system failure then transaction should be rolled back when system resume, need to be tested
+
+Db wil have a method as
+    autocommit:true
+    autocommit:false
+    if auto commit is fals, then it need to keep transactions
+
+    who will commit the transaction
+    Db shold have a method commit transaction, rollbackTransaction
+    if error occur, it will automatically rollback the transactin,
+    but if no error then some one from outside should commit the transaction
+
+
+    required for replicate module
+                 we can assume it as a transaction where
+                 doBatchUpdate
+                 queueBatchUpdate --> onCommit, need to keep transactionid and need to be removed if tx rollback
+
+
+
+ --
+ perosons : {name:"Rohit"}
+
+ TX start
+
+ Applane
+ 	tx  =xxxxxx
+
+
+ 	insert
+ 	update - $set, $unset, $inc
+ 	delete
+
+ 	array - insert,update,delete
+
+
+ __txs__
+ 	_id:"xxxx", txnid :"xxxxx", updates:[{$collection:"persons",$delete:{_id:1}}]
+
+ 	perosons : {$delete:{_id:1}}
+
+ 	_id:"xxxx", txnid :"xxxxx", updates:[{$collection:"persons",$insert:{_id:1,complete records}}]
+
+ 	persons : {_id:1,name:"rohit",amount:1000}
+ 	updates : {_id:1$inc:{amount:500}}, __txn:{amount:-500},
+
+ 	 db.persons.save({_id:"rohit"},{$inc:{amount"500},$push:[{txid:"",updates:{$inc:{amount:-500}}}]})
+
+ 	 persons : {_id:1,name:"rohit",amount:1000}
+ 	    name:rohit1 --> updates:{$set:{name:"rohit"}}
+ 	    name : rohit2
+ 	            updates:{$set:{name:"rohit"}}
+        age:30
+
+
+
+
+
+
+ 	_id:"xxxx", txnid :"xxxxx", updates:[{$collection:"persons",$update:{_id:1 }}]
+
+
+
+  var country = {_id:"91",country:"India"}
+
+  var tx1 = {_id:1,$set:{country:"Bharat"}} ==> {_id:"91",country:"Bharat",__txs__:[{txid:"tx1",$set:{country:"India"}}]}
+
+  var tx2 = {_id:1,$set:{country:"Hindustan"}} ==> {_id:"91",country:"Hindustan",__txs__:[{txid:"tx2",$set:{country:"Bharat"}}]}
+
+  Now assuming both tx1 and tx2 rollback in this order --> then value of country will be bharat that is error
+
+
+// ApplaneDB - startTx
+    __txs__, generate uniqe number --> updates : [ ]
+    this.txni =
+
+        --> startTx, already started --> error
+
+    commitTx(callback)
+    rollbackTx(callback)
+
+    insert
+
+    delete
+        persons
+            name
+            status : fk,
+    update
+        inc
+        set
+        unset
+        array
+
+
+     $set :{name:"Rohit",},$inc:{}
+     updatedfields
+      -->
+      getDocuments("__txs__")
+        [{txid:"",tx:{$set,{}}}]
+
+        {"xsdff":{},"dfsfds":{}}
+
+        {_id:"",$unset:{"__txs__.xsdff":""}}
+
+
+      __txs__
+        txid
+        updates : [
+            {$collection:"countries"},
+            {$collection:"states"},
+            {$collection:"cities"},
+        ]
+
+    __txs___
+        {_id:1,status:"commit", updates:[
+                {_id$collection:"countries",$insert:{country:"india"}}
+                {$collection:"cities",$update:{_id:"1"}},
+                {$collection:"states",$update:{_id:"1"}}
+
+            ]}
+
+
+    var record = {country:"usa",address:{city:"hisar",lineno:1,state:"haryana"},score:1}
+    var update = {_id:"usa",$set:{county:"india",address:{$set:{city:"hansi"},$inc:{lineno:10}}},$inc:{score:10}}
+
+    var required : {$set:{count:"usa","address.city":"hisar"},$inc:{score:-10,"address.line1":-10}}
+
+      var requiredRollbackUpdates = {}
+
+
+
+    country
+    score
+
+    address -- document,
+        updatedfield
+            lineno,city
+
+
+
+   var countries = [{_id:"india",country:"india",states:[{state:"haryana",cities:[{city:"hansi"}]}]}]
+
+    {_id:"india",$set:{country:"Bharat",states:{$insert:[],$update:[],$delete:[]}}}
+
+    $push:{states:{$each:[]}}
+    $set:{states.0.}
+    $pull:{}
+
+    push, pull,set, parentexp
+
+    pull, insert document
+
+    get updated docs
+    $pull , $set, document, oldArray, parentexp --> states)
+        updatedfield
+            state , cities
+            get _id
+            $set : states.0.state : "oldvalue"
+            $pull, $set, doc oldValue, states.0.cities
+
+
+
+    2 case  : insert [] --> new state
+            $pull, doc, states
+            $pull :{states:{_id :{$in:[]} }}
+   3 case : $delete
+        $set:{states:[]}  --> oldvalues
+
+
+     insert:[] :
+     update:[]
+     delete:[]
+
+     if any two  OR delete has doc
+     $set : oldValue
+
+     for insert
+
+     handleArrayTx($push, $pull, $set, $inc,array, exp, expOldvalues ){
+              insert:[] :
+              update:[]
+              delete:[]
+
+              Any two or delete
+              $set:{exp:"old"} --> return;
+
+              For insert
+
+              $pull:{} --> return
+
+              for each updates :{}
+                    $push, $pull, $set, $inc, document, tx,"states.0"
+
+     }
+     }
+
+     var country = {_id:"india",country:"India"}
+     var update1 = {_id:"india",country:"Bharat"}
+     var country= {_id:"india",country:"Bharat",__txs__:{1:{tx:{$set:{country:india}}}}}
+     var update2 = {_id:"india",country:"Hindustan"} --> {$set:{country:india}}
+
+     Date -->
+
+
+      12-05-2014----------
+       array
+                  insert -->
+                      keep pulls
+                  update
+                        $set
+
+                        $unset
+                        $inc
+                          reverse effect
+
+
+                  delete -->
+                      keep push
+                  override :
+                      complete old records as override
+
+
+                  var country = {_id:"india",states:[{_id:"haryana",state:"haryana"}]}
+
+                  var updates ={_id:"india",$set:{states:{$insert:[{state:"punjab"},{state:"UP"}]},languages:{$insert:[{language:"hindi"}]}}}
+                  --> arraydelete :{states:[{_id:"ppppp"}],languages:[{_id:"hinddiii"}]}
+
+                  var updates = {_id:"india",$set:{states:{$delete:[{_id:"haryana"},{_id:"haryana1"}]},languages:{$delete:[{_id:"hindi"}]}}}
+                  arrayinserts = {states:[{compelte record}]}
+                    array:{states :[{_id:"",type:"delete"},{_id:"",type:insert,value:{xxxx}},{_id:"xx",type:"update",$set:{},$unset,$inc:{}}]}
+
+                    array : [{_id:"",field:"states", type:"delete"}]
+
+                    actual : query --> {_id:"india"}, $pull :{states:{_id:"xxxx"},"txxx.tx.array":{_id:"xxxx"}}
+
+                    actual : query --> {_id:"india"}, $push :{states:$each:[{_id:"xxxx"}],$scloe:10000,$sort:"fieldname"},"txxx.tx.array.states":{_id:"xxxx"}}
+
+                    actual query   {_id:"idnia",states._id:"haryana"}, $set :{states.$.code :"1255"} , multi:false
+
+                  __txs__ = {"tx1":{tx : {_id:"india",$set:{}.$unset:{},$inc:{},arraydelete:{}}}}
+
+
+
+
+              cases
+                  --> states[], languages[], sports[], profile : tweets [ ]
+                  --> states []
+                  --> states [] insert,update,delete --> cities [] insert , update , delete
+                      update twice on same field and  other filds, $inc, $unset
+                  --> exception --> insert and update on same _id of array --> error
+                  --> exception --> insert and delete on same _id of array --> error
+                  --> array override case
+
+
+
+              array override case -> old value as set
+
+              array of subjects : ["Hindi","English",Math]
+              subject : [] --> set case override
+              subjects : {$insert:[],$delete:["Hindi","Eng"]}
+                --> reverse updates
+
+
+
+
+
+
+
+
+
+
+
+
+==================**Child saving and query - ChildModule-Server***
+//**doubt**
+//how to save collectionid in fields defined in fields, means accoountid of voucherlineitems ?????
+//document should support child or we ned to clone document at each state of module
+//**end doubt**
+//delivereries can be [ ] or {$insert:[],$update:[],$delete}
+
+//child module will chekck child relationship and add it to document as child otherwise we need to clone doucment like query
+//After Save child module will again, get _id and put it in all values of childs as parentid column and will call batchupdatebyid again --> which can be run in recursion
+//if [ ] comes, then we first need to delete previous deliveries of that order, then we need to save new deliveries
+//we do have knowledge of _id in case of update and delete
+
+
+childs:
+    alias
+    collection
+    fk
+    query
+
+fields :
+    collection : "pl.collections"
+    fields : [
+        {
+            field:"fields", type:"object", multiple:true, query : {$collection:"pl.fields"},fk:"collectionid"
+        }
+    ]
+
+
+    collection : "pl.fields"
+        fields : [
+            {
+                field:"fields", type:"object", multiple:true, query : {$collection:"pl.fields"},fk:"parentfieldid"
+            }
+        ]
+
+
+query :{myStudent:"$student", collectionFilds:"$fields", fields:1, }
+query :{$fields : {communications:-1}}
+
+query  : {$fields:{}}
+
+Document cloning is required for child module
+
+
+==================**Required column in triggers - RCTrigger-Server***
+21-04-14 with manjeet
+
+accountgroups
+    code
+    accountgroup
+accounts
+    code
+    account
+
+update, oldValue
+vouhcers
+    voucher_no
+    voucherdate
+    lineitems
+        accountid
+            account
+
+
+ = {age:20}
+
+updates, $set, $unset, $inc, old
+insert , delete, updates
+
+var insert = {name:"Rohit",age:30}
+var toJSON ={name:"Rohit",age:30}
+
+!....
+var insert = {name:"Rohit",age:30, cities:[{city:"hansi"}]}
+var toJSON = {name:"Rohit",age:30, cities:[{city:"hansi"}]}
+
+!....
+var insert = {name:"Rohit",age:30, cities:{$insert:[{city:"hansi"}]}}
+var toJSON = {name:"Rohit",age:30, cities:[{city:"hansi"}]}
+
+
+!....
+var old = {name:"Rohit",age:30}
+var updates = {_id:12,$set:{age:40}}
+
+var toJSON = {name:"Rohit",age:40}
+
+!....
+var old = {name:"Rohit",age:30}
+var updates = {_id:12,$unset:{age:40}}
+
+var toJSON = {name:"Rohit"}
+
+
+!....
+var old = {_id:12,name:"Rohit",age:30,address:{city:"Hansi"}}
+var updates = {_id:12,$set:{address:{$set:{city:"Hansi1"}}}}
+
+var toJSON = {_id:12,name:"Rohit",age:30,address:{city:Hansi1}}
+
+
+!....
+var old = {_id:12,name:"Rohit",age:30,address:{city:"Hansi"},images:[{"image:"2277"},{image:"124"},{image:"254"}]}
+var updates = {_id:12,$set:{images:{$insert:[{image:"000"}],$update:[{$query:{image:"124"},$set:{image:"421"}}],$delete:[{$query:{image:"254"}}]}}}
+
+var toJSON = {_id:12,name:"Rohit",age:30,address:{city:Hansi},images:[{"image:"2277"},{image:421},{image:000}]}
+
+           $unset:{name:""}
+           $unset:{name:true}
+
+getFields
+    should not start with $
+    _id, direct
+    $query,$set,$unset,$inc --> then keys of only these fields
+
+getFieldValue
+    check --> updates
+        $set
+        $unset
+        $inc
+        $query
+        requiredColumn
+        oldValue
+
+getDocuments(field)
+    updates, field
+    $set, field
+    $unset, field
+    $inc, field
+    $query, field
+    requiredColumn
+
+    va result = undefined, null, simplevalue, array, object
+    var oldValue = undefined, null, simplevalue, array, object
+
+    array,--> document server
+    object
+        $insert, $update, $delete  --> documents Array
+        other than these --> single document
+            $query,$set, $unset, or {city:"hansi"}
+
+    simplevalue, : "rohit",true, false, 1, new Date (), --> return undefined
+
+    null, ||   undefined,
+        getOldValue
+            array
+            object -->
+            other --> no document return undefiend
+
+
+
+      persons :
+        languages : ["Eng","Hindi"] --> do nt give document for this
+        cities:[{_id:"hansi"}],
+            oldValue : [{}]
+            documents
+                nochange  - X
+                insert
+                delete
+                update - -X
+
+
+var oldCountries = {_id:"india",states:[{_id:1,state:"har"},{_id:2,state:"punjab"},{_id:3,state:"himachal"},{_id:4,state:"up"}]}
+
+var countries = {_id:"india",$set:{country:"India",states:{$delete:{_id:1}}}}
+
+var punjbabDocument =  document(undefined, {_id:2,state:"punjab"},"nochange")
+document.set("state":"p1")
+
+document.deleteDocument("states",{_id:12});
+
+
+var voucherUpdates  =  {$collection:"vouhcers",$insert:[
+    {voucherno:11,vlis:[
+        {accountid:{_id:"cash"},amount:500} ,
+        {accountid:{_id:"asset"},amount:-500}
+    ]}
+]}
+
+var voucherTrigger = {requriFields:{vlis.accountid.name}}
+
+inturn : {voucherno:11,vlis:[
+                 {accountid:{_id:"cash",account:"Cash in hand"},amount:500} ,
+                 {accountid:{_id:"asset",account:"Fixed Asset"},amount:-500}
+             ]}
+
+
+var document = new Document(voucherUpdate,null,"insert",inturn)
+document.getDocuments("vli")
+var d1 = new Document({accountid:{_id:"cash"},amount:500},null,"insert",{accountid:{_id:"cash",account:"Cash in hand"},amount:500} )
+var d2 = new Document()
+
+var person = {_id:1,name:rohit,address:{city:"hisar",stateid:{_id:haryana}}}
+var updates  = {_id:1,$set:{name:"RK"}}
+var requiredDocument = {_id:1,name:RK,address:{city:"hisar",stateid:{_id:haryana,sate:"Haryana"}}}
+
+var getDocu
+
+
+
+
+
+
+
+
+
+
+==================**Replicate Saving - ReplicateModule-Server***
+{collection:"city",fields:[
+        {field:"city",type:"string"} ,
+        {field:"code",type:"string"}
+    ],
+    refferedfks:[
+                {collection:"persons",field:"mycity",set:["city"]},
+                {collection:"persons",field:"cities.$",set:[city]},
+                {collection:"persons",field:"address.city",set:[city]}
+                {collection:"persons",field:"documents.$.city",set:[city]}
+                {collection:"persons",field:"schools.$.address.$.city",set:[city]}
+                {collection:"students",field:"personid.mycity",set:[city]}
+
+
+    ]
+}
+
+
+update cities set
+
+cities
+    city
+    code
+    city + code
+
+
+
+
+cities:{
+    code : 98
+    city : "hansi"
+    _id :"hansi"
+}
+
+
+
+push --> set or something other
+personcollection:{
+    collection:"persons",
+    fields:[
+        {field:"person",type:"string"},
+        {field:"mycity",type:"fk",collection:"cities",set:["city"]}
+        {field:"address",type:"object",fields:[
+            {field:"city",type:"fk",collection:"cities",push:["city"]}
+            ]
+        },
+        {field:"documents",type:"object",multiple:true, fields:[
+                    {field:"city",type:"fk",collection:"cities",push:["city"]}
+                    ]
+        },
+
+        {field:"schools",type:"object",multiple:true, fields:[
+                            {field:"address",type:"object",fields:[
+                                      {field:"city",type:"fk",collection:"cities",push:["city"]}
+                                      ]
+                                  },
+                }
+
+    ]
+
+}
+persons : {
+    person :"Rohit"
+    mycity :{_id:"hansi",city:"hansi"} ,
+    cities:[{_id:city,city:"hansi"}]
+    address :{city :{_id:"hansi",city:"hansi"}},
+    documents : [
+        {city :{_id:"hansi",city:"hansi"}}
+    ],
+    schools : [
+        {address : [
+            city :{_id:"hansi",city:"hansi"}
+        ]}
+    ],
+    colleges : [
+            {address : [
+                cities :[{_id:"hansi",city:"hansi"}]
+            ]}
+        ]
+}
+
+students : {
+    student :"string"
+    personid :{
+        type:"fk",collection:"persons",push:["person","mycity.city"]
+    }
+
+}
+  collection        refferedcollection      field       set                         fieldid
+  students              persons             personid    ["person","mycity.city"]    personid
+  students              cities              personid.mycity  [city]                 personid
+
+
+
+>>>update for mycity
+    $query{mycity._id:"hansi"},$set:{"mycity.city":"hansi1"}
+>>>update for cities
+    $query{cities._id:"hansi"},$set:{"cities.$.city":"hansi"}
+>>>update for address
+        $query{address.city._id:"hansi"},$set:{"add.city.city":"hansi"}
+>>>update for documents
+        $query{documents.city._id:"hansi"},$set:{"documents.$.city.city":"hansi"}
+>>>update for schools
+        $query{schools.address.city._id:"hansi"},$set:{"schools.$.address.$.city.city":"hansi1"}
+
+triggers -- job on __fields__
+    insert, update, delete
+
+
+
+==================**Applicatin saving trigger***
+   No requirement
+   add unique index manually  on label + db
+==================**role saving trigger***
+   No requirement
+   add unique index manually  on rolename
+==================**Menu saving trigger***
+   upsert --> collection
+        collection : ""
+        and expect fields : applicationid
+   upsert in qview
+        id : collection
+        collectionid : fk of collection
+==================**QView saving
+    No requirement
+==================**User state**
+    getUser from db
+    get its roles
+    applications = query on applications where role matches
+
+    application id can come in user state, on the basis of this we need to select required app or first application
+    this state also need to be saved in user's state
+
+    get menus of selected application
+    using query
+        {
+            $collection:"__menus__",$fields:{label:1,collection:1,index:1,qviews:1,defaultqviewid:1},
+            $filter : {applicationid:"_id",parentmenuid:null},
+            $sort : {index:1},
+            $recursion : {
+               parentmenuid:"_id",
+               $alias:"menus"
+            }
+        }
+
+     getFromUserState -> menu index, if not   then menu should be 0, check for inside menus
+     get final menu that need to be shown
+     get collection from menu
+     if q views are defined here then these qviews should be used, other wise fire query on qview to get collection qviews
+     if defaultqviewid is defined, then get this defultqviewid, otherwise get it from userstate
+
+     now get view of selected qview
+
+        viewoptions
+            viweid
+            ui
+
+
+
+==================**View state**
+==================**Application control**======================
+** New application
+        label
+        db
+>>>
+** New Role
+        role
+>>>
+** Edit application
+    label :
+    roles grid
+        roleid : fk of roles
+>>>
+** New user with role in application
+        username
+        emailid
+        password
+        roles nested table ( role fk)
+            roleid
+>>>
+** New Menu
+        label :
+        index : number
+        collection :
+        applicationid : fk of application
+        parentmenuid : fk of menu
+        defaultquickviewid : fk  of qview
+        qviews : nested table of qviews : autosave is not allowed from here
+            label
+            qviewid : fk of qview
+            index
+            ui : grid or form
+    Edit menus : menu grid
+*** New functions : form
+
+***Edit functions : grid --> detail
+
+
+===================**View control**==============================
+** Add field to collection
+    field
+    label
+    type
+    ui
+    parentfieldid
+    index
+    collectionid --> should be using default value fk of collections
+
+    visibilityGrid
+    visibilityForm
+    indexGrid
+    indexForm
+    uiGrid
+    uiForm
+>>>
+** Manage filed in collection
+    show all fields of this collection with edit support
+>>>
+** Manage trigger to collection --> Edit collection
+   show nested table of triggers
+        ask from manjeet
+
+>>>
+
+!** Edit field in view : Later
+!** Visible or hidden fields in View : Later
+
+===================**Busy message & Short message
+===================**ConfirmationBox
+Esc enabled
+confirmOptions : {
+    title :"" , Default --> confirm
+    message :""
+    options : [
+        {label:"",onClick},
+        {label:"",onClick},
+        {label:"",onClick}
+    ],
+    onClick : callback
+}
+===================**
+
+
