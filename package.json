@@ -3,7 +3,13 @@
     "version":"1.0.0",
     "description":"Mongo DB",
     "main":"index.js",
- "dependencies":{"mocha":"*","mongodb":"*","chai":"*","q":"*","ApplaneCore":"git+https://2497b79998465e241f37727770759465f4eb0cc3:x-oauth-basic@github.com/daffodilsw/ApplaneCore.git"},
+ "dependencies":{"mocha":"*","express":"4.1.1",
+        "mongodb":"1.4.2",
+        "formidable":"1.0.14",
+        "moment":"2.6.0",
+        "body-parser":"1.0.2",
+        "newrelic" : "1.5.2",
+        "q":"1.0.1", "ApplaneCore":"git+https://2497b79998465e241f37727770759465f4eb0cc3:x-oauth-basic@github.com/daffodilsw/ApplaneCore.git"},
 "scripts":{
 "test": "sudo ./node_modules/.bin/mocha --recursive -R xunit test/ > test-reports.x$"
 },
