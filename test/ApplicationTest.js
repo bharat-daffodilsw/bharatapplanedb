@@ -9,7 +9,7 @@
  */
 var expect = require('chai').expect;
 var ApplaneDB = require("../lib/DB.js");
-var Config = require("../config.js");
+var Config = require("./../config.js");
 
 
 describe("ApplicationTest", function () {
