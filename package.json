@@ -3,7 +3,7 @@
     "version":"1.0.0",
     "description":"Mongo DB",
     "main":"index.js",
- "dependencies":{"mocha":"*","mongodb":"*","chai":"*"},
+ "dependencies":{"mocha":"*","mongodb":"*","chai":"*","q":"*"},
 "scripts":{
 "test": "sudo ./node_modules/.bin/mocha --recursive -R xunit test/ > test-reports.x$"
 },
