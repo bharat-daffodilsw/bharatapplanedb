@@ -11,7 +11,7 @@
         "newrelic" : "1.5.2",
         "q":"1.0.1", "ApplaneCore":"git+https://2497b79998465e241f37727770759465f4eb0cc3:x-oauth-basic@github.com/daffodilsw/ApplaneCore.git","ApplaneDB":"git+https://2497b79998465e241f37727770759465f4eb0cc3:x-oauth-basic@github.com/daffodilsw/ApplaneDB.git"},
 "scripts":{
-"test": "sudo ./node_modules/.bin/mocha --recursive -R xunit test/ > test-reports.x$"
+"test": "sudo ./node_modules/.bin/mocha --recursive"
 },
     "devDependencies":{},
     
