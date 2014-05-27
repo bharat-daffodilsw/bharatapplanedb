@@ -1,17 +1,11 @@
 
-Video --> 6 hs explore from Naveen, Html 5 and css --> share by yogesh sir at yammer 26-05-2014
 
-
-Caching of image, js and html
-Order, group State should be saved and persist
-Column on/off setting should be saved: In progress
-Date : today, +1, -1 support
-Composite fk : option : fk of type : string ,value : query
-Saving of order and group in user last state
-FTS ; DatAModel filter adding for fTS
-
-
-
+options type auto complete (issue in time column)
+    all data are not showing on button click, if selected some thing
+    scope is not applying on select, it is applying on focus lost, (even focus lost also is not working)
+    loading image issue
+Binding issue in panel when table is clicked, if cell is editable, then we need to click again to bind form with current row
+Nestd table, Add, --> panel should not open, also close is not working
 
 displayField --> name --> address.name, contact.name, name, it should be multiple display exp
     name,address
@@ -21,11 +15,17 @@ time, unit, schedule, composite fk
 
 http://127.0.0.1:5100/js/lib/angular-animate.min.js.map : could not be loaded
 
-
-
-
+Insert row, without save delete row, issue
+Multiple reference --> New value add by enter, required in setFields
+Amit sing, detail clikc, two rows, bt does not change
 Multiple FK saving --> issue -->$$ is going in saving --> 	[{"$update":[{"$set":{"label":"Todos2","fields":[{"field":"tasks","label":"Tasks","type":"string","ui":"text","visibility":true,"collectionid":{"collection":"Todos","_id":"536a2fb1cf2623940f000f32"},"_id":"536a2fd7cf2623940f000f71","$$hashKey":"0JR"}]},"_id":"536cc07305a27aac0d0000b0"}],"$collection":"pl.qviews"}]
+
+
+
+
 Nested table inside nested table
+Auto save support required
+Placeholder should be removed from autocomplete
 If not field given to set, then display fields is not showing
 Quick view --> add fields, hidden fields, field override
 $recrusive
@@ -37,6 +37,10 @@ focus on first component in panel
 
 
 * Date filter and number filter
+* AutoSave in FK
+
+
+
 * New Quick view
 * Update action
 * Header action
@@ -65,4 +69,107 @@ focus on first component in panel
  * Dashboard --> Unplanned
  * Html view --> Unplanned
  * Validation --> Mandatory ( Low P) Unplanned
+ *
+***************************apprx complete***************
+* Menu --> Submenus ( 4 hr) : Ashish
+* Renders and Editor (2 d) : Ashish
+    *** Multiple reference, File upload, Currency, Duration, Composite FK, Number : Ashish
+* BusyMessage + Warnings + ShortMessage + Confirm Box + Error Box ( 1 day) : Ashish
+* View control to user/admin --> (2 day)  : Ashish
+     **Add field,Edit Field, Add field to view, Triggers, Applications
+* Quick view + Menu trigger : Rohit(4 hrs)  --> Menu trigger done
+* User State + View State : Rohit : (1 D)
+* Filter Widget --> Orders, Filters and Groups (2 d) : Ashish : Assigned
+* Group by Grid / Tree (3 D) : Assigned to Naveen with Ashish
+*=======================================================================================================
+* User can switch admin and vice versa  : Naveen ( 2 hrs P4)
+        userState : admin : true or admin  :false, reload user state
+        workbench controller
+        we have two action in userOptions --> Swich to user and Switch to admin, it will be on the basis of some boolean variable
+* Popup support to open view :8 hrs (Naveen /Ashish P1)
 
+* Applications (Menu groups)
+    All applications
+        Create Application  :Rohit Bansal (2 hrs P1)
+* Menus
+    ** Child applications (Show in menu) (2 hrs P2)
+    ** Menus (Two level menus) with selection ( 2 hrs P1)
+    ** Setting  (4 hrs P1)
+            Menu Group
+                Edit application
+                Create Role
+                Edit roles
+                Add Database
+                Add user
+                Edit Menus
+                Add menu
+
+
+* Toolbar
+    Support to add in left, right and center, it will support of actionTemplate, if action Template not provided then it will add its own button
+    if center has not much space then it should move to next row
+    Left : Basic action
+    Right : Close and resize
+    Center --> UserPreferencePallete
+* QViews
+    menugroup
+    close current view
+    Open selected qview
+* Child view need to add watch on parent view, if parent get close, child it self need to close itself
+* DataModel --> Navigation and DefaultValue
+
+
+
+* On the basis of qviewselected
+    if it is empty show all of collections and onclick open the view
+    if it is not empty show quickviews[qviewselected] and on click show all quickviews in dropdown
+
+* Show insert, delete, save, update, refresh action on toolbar according to the role
+* Commit action on the toolbar, when role, user changes. While commit ask for commit on localdb and admindb
+* Action will be provided on center toolbar and pop up will open on click and options are
+        order
+             On select order, user select the field on which they applied order  [options --> asc,desc images]
+          groupby
+             On select group, user select the field on which they applied group
+          filter
+             On select filter, user select the field on which they applied filter
+
+* Right side of toolbar
+      Manage Fields and popup form open
+         label , labelGrid , labelForm
+         field , fieldGrid , fieldForm
+         multple : boolean
+         ui :  not mandatory
+         uiForm
+         uiGrid
+         defaultShow : true/false
+         visibilityGrid
+         visibilityForm
+         parentFieldId : [states in countries]
+         index :
+         indexForm :
+         indexGrid :
+         groups :
+         defaultValue
+
+      Define column groups and pop up form will open
+         label
+         noOfColumns
+         showColumnLabel
+         showGroupTitle
+         width
+         type : [flow panel]
+
+      Manage User Actions
+         Header Actions
+         Row Actions
+
+* On grid header, pop up action will be provided and options are
+      order
+      groupby
+      filters
+* Navigation
+
+* Busy Message
+* Confirm Action
+* You have some changes Do you want to navigate

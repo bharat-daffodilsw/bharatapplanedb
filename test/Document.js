@@ -25,92 +25,92 @@ describe("Documenttestcase", function () {
         //person example
 
         var oldperson = {
-            _id:"rohit",
-            name:"rohit",
-            status:"single",
-            age:30,
-            address:{line1:"zz", line2:"xx", city:"hansi", state:"haryana", score:9 },
-            gameinfo:{_id:"cricket", "game":"cricket"},
-            schools:[
-                {_id:"pcsd", school:"pcsd", code:"91", status:"private", score:100},
-                {_id:"sdm", school:"sdm", code:"92", status:"public", score:98},
-                {_id:"psb", school:"psb", code:"93", status:"public", score:90}
+            _id: "rohit",
+            name: "rohit",
+            status: "single",
+            age: 30,
+            address: {line1: "zz", line2: "xx", city: "hansi", state: "haryana", score: 9 },
+            gameinfo: {_id: "cricket", "game": "cricket"},
+            schools: [
+                {_id: "pcsd", school: "pcsd", code: "91", status: "private", score: 100},
+                {_id: "sdm", school: "sdm", code: "92", status: "public", score: 98},
+                {_id: "psb", school: "psb", code: "93", status: "public", score: 90}
             ],
-            countries:[
-                {_id:"india", country:"india", code:"91", states:[
-                    {_id:"haryana", state:"haryana", code:"10", cities:[
-                        {_id:"hisar", city:"hisar", code:"1662"},
-                        {_id:"sirsa", city:"sirsa", code:"1664"},
-                        {_id:"rohtak", city:"rohtak", code:"1262"},
-                        {_id:"ggn", city:"ggn", code:"124"}
+            countries: [
+                {_id: "india", country: "india", code: "91", states: [
+                    {_id: "haryana", state: "haryana", code: "10", cities: [
+                        {_id: "hisar", city: "hisar", code: "1662"},
+                        {_id: "sirsa", city: "sirsa", code: "1664"},
+                        {_id: "rohtak", city: "rohtak", code: "1262"},
+                        {_id: "ggn", city: "ggn", code: "124"}
                     ]}
                 ]},
-                {_id:"USA", country:"USA", code:"0011", states:[
-                    {_id:"new york", state:"new york", code:"12", cities:[
-                        {_id:"manhattan", city:"manhattan", code:"1662"},
-                        {_id:"brooklyn", city:"brooklyn", code:"1664"}
+                {_id: "USA", country: "USA", code: "0011", states: [
+                    {_id: "new york", state: "new york", code: "12", cities: [
+                        {_id: "manhattan", city: "manhattan", code: "1662"},
+                        {_id: "brooklyn", city: "brooklyn", code: "1664"}
                     ]},
-                    {_id:"washington", state:"washington", code:"132", cities:[
-                        {_id:"florida", city:"florida", code:"1754"},
-                        {"_id":"dc", city:"dc"}
+                    {_id: "washington", state: "washington", code: "132", cities: [
+                        {_id: "florida", city: "florida", code: "1754"},
+                        {"_id": "dc", city: "dc"}
                     ]}
                 ]}
             ],
-            languages:[
-                {_id:"hindi", language:"hindi"},
-                {_id:"engish", language:"english"}
+            languages: [
+                {_id: "hindi", language: "hindi"},
+                {_id: "engish", language: "english"}
             ],
-            score:10
+            score: 10
         }
 
         var personUpdates = {
-            _id:"rohit",
-            $set:{
-                "address":{$set:{line1:"z1"}, $unset:{line2:""}},
-                status:"married",
-                schools:{$insert:[
-                    {_id:"dav", school:"dav", score:"17"}
-                ], $update:[
-                    {_id:"sdm", $set:{school:"SDM"}, $unset:{status:""}, $inc:{score:10}}
-                ], $delete:[
-                    {_id:"pcsd"}
+            _id: "rohit",
+            $set: {
+                "address": {$set: {line1: "z1"}, $unset: {line2: ""}},
+                status: "married",
+                schools: {$insert: [
+                    {_id: "dav", school: "dav", score: "17"}
+                ], $update: [
+                    {_id: "sdm", $set: {school: "SDM"}, $unset: {status: ""}, $inc: {score: 10}}
+                ], $delete: [
+                    {_id: "pcsd"}
                 ]},
-                countries:{$insert:[
-                    {_id:"Pakistan", country:"Pakistan", code:"92", states:[
-                        {_id:"lahore", state:"lahore", code:"12", cities:[
-                            {_id:"multan", city:"multan", code:"1662"}
+                countries: {$insert: [
+                    {_id: "Pakistan", country: "Pakistan", code: "92", states: [
+                        {_id: "lahore", state: "lahore", code: "12", cities: [
+                            {_id: "multan", city: "multan", code: "1662"}
                         ]}
                     ]}
-                ], $update:[
-                    {_id:"USA", $set:{states:{$insert:[
-                        {_id:"canada", state:"canada", code:"121", cities:[
-                            {_id:"mini-punjab", city:"mini-punjab", code:"18852"}
+                ], $update: [
+                    {_id: "USA", $set: {states: {$insert: [
+                        {_id: "canada", state: "canada", code: "121", cities: [
+                            {_id: "mini-punjab", city: "mini-punjab", code: "18852"}
                         ]}
-                    ], $delete:[
-                        {_id:"new york"}
-                    ], $update:[
-                        {"_id":"washington", $set:{"cities":{"$insert":[
-                            {_id:"abc", city:"abc", code:"1864084"}
-                        ], $delete:[
-                            {"_id":"florida"}
-                        ], $update:[
-                            {"_id":"dc", "$set":{city:"dc1"}}
+                    ], $delete: [
+                        {_id: "new york"}
+                    ], $update: [
+                        {"_id": "washington", $set: {"cities": {"$insert": [
+                            {_id: "abc", city: "abc", code: "1864084"}
+                        ], $delete: [
+                            {"_id": "florida"}
+                        ], $update: [
+                            {"_id": "dc", "$set": {city: "dc1"}}
                         ]}}}
                     ]}}},
-                    {_id:"india", $set:{states:{$insert:[
-                        {_id:"himachal", state:"himachal", code:"099", cities:[
-                            {_id:"kasol", city:"kasol", code:"876"}
+                    {_id: "india", $set: {states: {$insert: [
+                        {_id: "himachal", state: "himachal", code: "099", cities: [
+                            {_id: "kasol", city: "kasol", code: "876"}
                         ]}
-                    ], $delete:[], $update:[]}}}
+                    ], $delete: [], $update: []}}}
                 ]},
-                languages:[
-                    {_id:"engish", language:"english"},
-                    {_id:"german", language:"german"}
+                languages: [
+                    {_id: "engish", language: "english"},
+                    {_id: "german", language: "german"}
                 ]
 
             },
-            $unset:{age:"", gameinfo:""},
-            $inc:{score:10}
+            $unset: {age: "", gameinfo: ""},
+            $inc: {score: 10}
         }
 
         var document = new Document(personUpdates, oldperson, "update");
@@ -192,11 +192,11 @@ describe("Documenttestcase", function () {
         expect(document.getDocuments("languages")).to.have.length(4);
 
 
-        document.insertDocument("countries", {"_id":"sri lanka", "country":"sri lanka", "states":[
-            {"_id":"colombo", "state":"colombo"}
+        document.insertDocument("countries", {"_id": "sri lanka", "country": "sri lanka", "states": [
+            {"_id": "colombo", "state": "colombo"}
         ]})
         expect(document.getDocuments("countries", ["insert"])).to.have.length(2);
-        document.insertDocument("schools", {"_id":"mnc", "school":"mnc"});
+        document.insertDocument("schools", {"_id": "mnc", "school": "mnc"});
         expect(document.getDocuments("schools", ["insert"])).to.have.length(2);
 //        document.deleteDocument("schools", {"_id": "mnc"});
 //        //ToDO
@@ -232,21 +232,21 @@ describe("Documenttestcase", function () {
     })
     it("test case no 2", function (done) {
         var oldRecord = {
-            _id:"1",
-            voucherno:"001",
-            vlis:[
-                {_id:"1", accountid:{_id:"cash"}, amount:100},
-                {_id:"2", accountid:{_id:"cash", account:"cash"}, amount:200},
-                {_id:"3", accountid:{_id:"salary", account:"salary"}, amount:100}
+            _id: "1",
+            voucherno: "001",
+            vlis: [
+                {_id: "1", accountid: {_id: "cash"}, amount: 100},
+                {_id: "2", accountid: {_id: "cash", account: "cash"}, amount: 200},
+                {_id: "3", accountid: {_id: "salary", account: "salary"}, amount: 100}
             ]
         };
         var updates = {
-            _id:"1",
-            $set:{
-                voucherno:"002",
-                vlis:{
-                    $update:[
-                        {$query:{amount:100}, $set:{amount:400, accountid:{$query:{_id:"profit"}, $set:{account:"profit"}}}}
+            _id: "1",
+            $set: {
+                voucherno: "002",
+                vlis: {
+                    $update: [
+                        {$query: {amount: 100}, $set: {amount: 400, accountid: {$query: {_id: "profit"}, $set: {account: "profit"}}}}
                     ]
                 }
             }
@@ -270,17 +270,17 @@ describe("Documenttestcase", function () {
     });
     it("unset case in array and object", function (done) {
         var oldRecord = {
-            _id:"1",
-            "name":"kapil dalal",
-            "reportingto":[
-                {_id:"1", "name":"amit"},
-                {_id:"2", name:"rohit"}
+            _id: "1",
+            "name": "kapil dalal",
+            "reportingto": [
+                {_id: "1", "name": "amit"},
+                {_id: "2", name: "rohit"}
             ],
-            "address":{"city":"hisar", state:"haryana"}
+            "address": {"city": "hisar", state: "haryana"}
         };
         var updates = {
-            _id:"1",
-            $unset:{"address":"", "reportingto":""}
+            _id: "1",
+            $unset: {"address": "", "reportingto": ""}
         };
         var document = new Document(updates, oldRecord, "update");
         var updatedFields = document.getUpdatedFields();
@@ -309,97 +309,97 @@ describe("Documenttestcase", function () {
 
         document.unset("reportingto", undefined);
         document.set("reportingto", [
-            {"name":"ashish"}
+            {"name": "ashish"}
         ]);
         done();
     });
     it("test case to get  allfields", function (done) {
         var oldperson = {
-            _id:"rohit",
-            name:"rohit",
-            status:"single",
-            age:30,
-            address:{line1:"zz", line2:"xx", city:"hansi", state:"haryana", score:9 },
-            gameinfo:{_id:"cricket", "game":"cricket"},
-            schools:[
-                {_id:"pcsd", school:"pcsd", code:"91", status:"private", score:100},
-                {_id:"sdm", school:"sdm", code:"92", status:"public", score:98},
-                {_id:"psb", school:"psb", code:"93", status:"public", score:90}
+            _id: "rohit",
+            name: "rohit",
+            status: "single",
+            age: 30,
+            address: {line1: "zz", line2: "xx", city: "hansi", state: "haryana", score: 9 },
+            gameinfo: {_id: "cricket", "game": "cricket"},
+            schools: [
+                {_id: "pcsd", school: "pcsd", code: "91", status: "private", score: 100},
+                {_id: "sdm", school: "sdm", code: "92", status: "public", score: 98},
+                {_id: "psb", school: "psb", code: "93", status: "public", score: 90}
             ],
-            countries:[
-                {_id:"india", country:"india", code:"91", states:[
-                    {_id:"haryana", state:"haryana", code:"10", cities:[
-                        {_id:"hisar", city:"hisar", code:"1662"},
-                        {_id:"sirsa", city:"sirsa", code:"1664"},
-                        {_id:"rohtak", city:"rohtak", code:"1262"},
-                        {_id:"ggn", city:"ggn", code:"124"}
+            countries: [
+                {_id: "india", country: "india", code: "91", states: [
+                    {_id: "haryana", state: "haryana", code: "10", cities: [
+                        {_id: "hisar", city: "hisar", code: "1662"},
+                        {_id: "sirsa", city: "sirsa", code: "1664"},
+                        {_id: "rohtak", city: "rohtak", code: "1262"},
+                        {_id: "ggn", city: "ggn", code: "124"}
                     ]}
                 ]},
-                {_id:"USA", country:"USA", code:"0011", states:[
-                    {_id:"new york", state:"new york", code:"12", cities:[
-                        {_id:"manhattan", city:"manhattan", code:"1662"},
-                        {_id:"brooklyn", city:"brooklyn", code:"1664"}
+                {_id: "USA", country: "USA", code: "0011", states: [
+                    {_id: "new york", state: "new york", code: "12", cities: [
+                        {_id: "manhattan", city: "manhattan", code: "1662"},
+                        {_id: "brooklyn", city: "brooklyn", code: "1664"}
                     ]},
-                    {_id:"washington", state:"washington", code:"132", cities:[
-                        {_id:"florida", city:"florida", code:"1754"},
-                        {"_id":"dc", "$set":{city:"dc1"}}
+                    {_id: "washington", state: "washington", code: "132", cities: [
+                        {_id: "florida", city: "florida", code: "1754"},
+                        {"_id": "dc", "$set": {city: "dc1"}}
                     ]}
                 ]}
             ],
-            languages:[
-                {_id:"hindi", language:"hindi"},
-                {_id:"engish", language:"english"}
+            languages: [
+                {_id: "hindi", language: "hindi"},
+                {_id: "engish", language: "english"}
             ],
-            score:10
+            score: 10
         }
         var personUpdates = {
-            _id:"rohit",
-            $set:{
-                "address":{$set:{line1:"z1"}, $unset:{line2:""}},
-                status:"married",
-                schools:{$insert:[
-                    {_id:"dav", school:"dav", score:"17"}
-                ], $update:[
-                    {_id:"sdm", $set:{school:"SDM"}, $unset:{status:""}, $inc:{score:10}}
-                ], $delete:[
-                    {_id:"pcsd"}
+            _id: "rohit",
+            $set: {
+                "address": {$set: {line1: "z1"}, $unset: {line2: ""}},
+                status: "married",
+                schools: {$insert: [
+                    {_id: "dav", school: "dav", score: "17"}
+                ], $update: [
+                    {_id: "sdm", $set: {school: "SDM"}, $unset: {status: ""}, $inc: {score: 10}}
+                ], $delete: [
+                    {_id: "pcsd"}
                 ]},
-                countries:{$insert:[
-                    {_id:"Pakistan", country:"Pakistan", code:"92", states:[
-                        {_id:"lahore", state:"lahore", code:"12", cities:[
-                            {_id:"multan", city:"multan", code:"1662"}
+                countries: {$insert: [
+                    {_id: "Pakistan", country: "Pakistan", code: "92", states: [
+                        {_id: "lahore", state: "lahore", code: "12", cities: [
+                            {_id: "multan", city: "multan", code: "1662"}
                         ]}
                     ]}
-                ], $update:[
-                    {_id:"USA", $set:{states:{$insert:[
-                        {_id:"canada", state:"canada", code:"121", cities:[
-                            {_id:"mini-punjab", city:"mini-punjab", code:"18852"}
+                ], $update: [
+                    {_id: "USA", $set: {states: {$insert: [
+                        {_id: "canada", state: "canada", code: "121", cities: [
+                            {_id: "mini-punjab", city: "mini-punjab", code: "18852"}
                         ]}
-                    ], $delete:[
-                        {_id:"new york"}
-                    ], $update:[
-                        {"_id":"washington", $set:{"cities":{"$insert":[
-                            {_id:"abc", city:"abc", code:"1864084"}
-                        ], $delete:[
-                            {"_id":"florida"}
-                        ], $update:[
-                            {"_id":"dc", "$set":{city:"dc1"}}
+                    ], $delete: [
+                        {_id: "new york"}
+                    ], $update: [
+                        {"_id": "washington", $set: {"cities": {"$insert": [
+                            {_id: "abc", city: "abc", code: "1864084"}
+                        ], $delete: [
+                            {"_id": "florida"}
+                        ], $update: [
+                            {"_id": "dc", "$set": {city: "dc1"}}
                         ]}}}
                     ]}}},
-                    {_id:"india", $set:{states:{$insert:[
-                        {_id:"himachal", state:"himachal", code:"099", cities:[
-                            {_id:"kasol", city:"kasol", code:"876"}
+                    {_id: "india", $set: {states: {$insert: [
+                        {_id: "himachal", state: "himachal", code: "099", cities: [
+                            {_id: "kasol", city: "kasol", code: "876"}
                         ]}
-                    ], $delete:[], $update:[]}}}
+                    ], $delete: [], $update: []}}}
                 ]},
-                languages:[
-                    {_id:"engish", language:"english"},
-                    {_id:"german", language:"german"}
+                languages: [
+                    {_id: "engish", language: "english"},
+                    {_id: "german", language: "german"}
                 ]
 
             },
-            $unset:{age:"", gameinfo:""},
-            $inc:{score:10}
+            $unset: {age: "", gameinfo: ""},
+            $inc: {score: 10}
         }
         var document = new Document(personUpdates, oldperson, "update");
         var allFields = JSON.stringify(document.getFields());
@@ -411,7 +411,7 @@ describe("Documenttestcase", function () {
         done();
     });
     it("simple case of merging", function (done) {
-        var insert = {name:"Rohit", age:30};
+        var insert = {name: "Rohit", age: 30};
         var document = new Document(insert, null, "insert");
         var allFields = JSON.stringify(document.getFields());
         var expectedFields = ["name", "age"];
@@ -425,8 +425,8 @@ describe("Documenttestcase", function () {
         done();
     });
     it("simple case of merging while update", function (done) {
-        var old = {_id:12, name:"Rohit", age:30};
-        var updates = {_id:12, $set:{age:40}};
+        var old = {_id: 12, name: "Rohit", age: 30};
+        var updates = {_id: 12, $set: {age: 40}};
         var document = new Document(updates, old, "update");
         var allFields = document.getFields();
         var expectedFields = ["name", "age", "_id"];
@@ -441,8 +441,8 @@ describe("Documenttestcase", function () {
 
     })
     it("simple case of merging while update case 2", function (done) {
-        var old = {_id:12, name:"Rohit", age:30};
-        var updates = {_id:12, $unset:{age:40}};
+        var old = {_id: 12, name: "Rohit", age: 30};
+        var updates = {_id: 12, $unset: {age: 40}};
         var document = new Document(updates, old, "update");
         var allFields = document.getFields();
         var expectedFields = ["name", "age", "_id"];
@@ -456,7 +456,7 @@ describe("Documenttestcase", function () {
         done();
     })
     it("object case of merging while insert", function (done) {
-        var insert = {_id:12, name:"Rohit", age:30, address:{city:"Hansi"}}
+        var insert = {_id: 12, name: "Rohit", age: 30, address: {city: "Hansi"}}
         var document = new Document(insert, null, "insert");
         var allFields = document.getFields();
         var expectedFields = ["name", "age", "address"];
@@ -471,8 +471,8 @@ describe("Documenttestcase", function () {
         done();
     })
     it("object case of merging while update", function (done) {
-        var old = {_id:12, name:"Rohit", age:30, address:{city:"Hansi", "state":"haryana"}};
-        var updates = {_id:12, $set:{address:{$set:{city:"Hansi1"}}}};
+        var old = {_id: 12, name: "Rohit", age: 30, address: {city: "Hansi", "state": "haryana"}};
+        var updates = {_id: 12, $set: {address: {$set: {city: "Hansi1"}}}};
         var document = new Document(updates, old, "update");
         var allFields = document.getFields();
         var expectedFields = ["name", "age", "address", "_id"];
@@ -488,17 +488,17 @@ describe("Documenttestcase", function () {
         done();
     })
     it("array case of merging while update", function (done) {
-        var old = {_id:12, name:"Rohit", age:30, address:{city:"Hansi"}, images:[
-            {"image":"2277"},
-            {image:"124"},
-            {image:"254"}
+        var old = {_id: 12, name: "Rohit", age: 30, address: {city: "Hansi"}, images: [
+            {"image": "2277"},
+            {image: "124"},
+            {image: "254"}
         ]};
-        var updates = {_id:12, $set:{images:{$insert:[
-            {_id:"000", image:"000"}
-        ], $update:[
-            {$query:{image:"124"}, $set:{image:"421"}}
-        ], $delete:[
-            {$query:{image:"254"}}
+        var updates = {_id: 12, $set: {images: {$insert: [
+            {_id: "000", image: "000"}
+        ], $update: [
+            {$query: {image: "124"}, $set: {image: "421"}}
+        ], $delete: [
+            {$query: {image: "254"}}
         ]}}}
         var document = new Document(updates, old, "update");
         var allFields = document.getFields();
@@ -517,42 +517,42 @@ describe("Documenttestcase", function () {
     })
     it("all operations in case of insert", function (done) {
         var oldperson = {
-            _id:"rohit",
-            name:"rohit",
-            status:"single",
-            age:30,
-            address:{line1:"zz", line2:"xx", city:"hansi", state:"haryana", score:9 },
-            gameinfo:{_id:"cricket", "game":"cricket"},
-            schools:[
-                {_id:"pcsd", school:"pcsd", code:"91", status:"private", score:100},
-                {_id:"sdm", school:"sdm", code:"92", status:"public", score:98},
-                {_id:"psb", school:"psb", code:"93", status:"public", score:90}
+            _id: "rohit",
+            name: "rohit",
+            status: "single",
+            age: 30,
+            address: {line1: "zz", line2: "xx", city: "hansi", state: "haryana", score: 9 },
+            gameinfo: {_id: "cricket", "game": "cricket"},
+            schools: [
+                {_id: "pcsd", school: "pcsd", code: "91", status: "private", score: 100},
+                {_id: "sdm", school: "sdm", code: "92", status: "public", score: 98},
+                {_id: "psb", school: "psb", code: "93", status: "public", score: 90}
             ],
-            countries:[
-                {_id:"india", country:"india", code:"91", states:[
-                    {_id:"haryana", state:"haryana", code:"10", cities:[
-                        {_id:"hisar", city:"hisar", code:"1662"},
-                        {_id:"sirsa", city:"sirsa", code:"1664"},
-                        {_id:"rohtak", city:"rohtak", code:"1262"},
-                        {_id:"ggn", city:"ggn", code:"124"}
+            countries: [
+                {_id: "india", country: "india", code: "91", states: [
+                    {_id: "haryana", state: "haryana", code: "10", cities: [
+                        {_id: "hisar", city: "hisar", code: "1662"},
+                        {_id: "sirsa", city: "sirsa", code: "1664"},
+                        {_id: "rohtak", city: "rohtak", code: "1262"},
+                        {_id: "ggn", city: "ggn", code: "124"}
                     ]}
                 ]},
-                {_id:"USA", country:"USA", code:"0011", states:[
-                    {_id:"new york", state:"new york", code:"12", cities:[
-                        {_id:"manhattan", city:"manhattan", code:"1662"},
-                        {_id:"brooklyn", city:"brooklyn", code:"1664"}
+                {_id: "USA", country: "USA", code: "0011", states: [
+                    {_id: "new york", state: "new york", code: "12", cities: [
+                        {_id: "manhattan", city: "manhattan", code: "1662"},
+                        {_id: "brooklyn", city: "brooklyn", code: "1664"}
                     ]},
-                    {_id:"washington", state:"washington", code:"132", cities:[
-                        {_id:"florida", city:"florida", code:"1754"},
-                        {"_id":"dc", "$set":{city:"dc1"}}
+                    {_id: "washington", state: "washington", code: "132", cities: [
+                        {_id: "florida", city: "florida", code: "1754"},
+                        {"_id": "dc", "$set": {city: "dc1"}}
                     ]}
                 ]}
             ],
-            languages:[
-                {_id:"hindi", language:"hindi"},
-                {_id:"engish", language:"english"}
+            languages: [
+                {_id: "hindi", language: "hindi"},
+                {_id: "engish", language: "english"}
             ],
-            score:10
+            score: 10
         };
         var document = new Document(oldperson, null, "insert");
         var allFields = document.getFields();
@@ -584,92 +584,92 @@ describe("Documenttestcase", function () {
     })
     it("all operations in case of update", function (done) {
         var oldperson = {
-            _id:"rohit",
-            name:"rohit",
-            status:"single",
-            age:30,
-            address:{line1:"zz", line2:"xx", city:"hansi", state:"haryana", score:9 },
-            gameinfo:{_id:"cricket", "game":"cricket"},
-            schools:[
-                {_id:"pcsd", school:"pcsd", code:"91", status:"private", score:100},
-                {_id:"sdm", school:"sdm", code:"92", status:"public", score:98},
-                {_id:"psb", school:"psb", code:"93", status:"public", score:90}
+            _id: "rohit",
+            name: "rohit",
+            status: "single",
+            age: 30,
+            address: {line1: "zz", line2: "xx", city: "hansi", state: "haryana", score: 9 },
+            gameinfo: {_id: "cricket", "game": "cricket"},
+            schools: [
+                {_id: "pcsd", school: "pcsd", code: "91", status: "private", score: 100},
+                {_id: "sdm", school: "sdm", code: "92", status: "public", score: 98},
+                {_id: "psb", school: "psb", code: "93", status: "public", score: 90}
             ],
-            countries:[
-                {_id:"india", country:"india", code:"91", states:[
-                    {_id:"haryana", state:"haryana", code:"10", cities:[
-                        {_id:"hisar", city:"hisar", code:"1662"},
-                        {_id:"sirsa", city:"sirsa", code:"1664"},
-                        {_id:"rohtak", city:"rohtak", code:"1262"},
-                        {_id:"ggn", city:"ggn", code:"124"}
+            countries: [
+                {_id: "india", country: "india", code: "91", states: [
+                    {_id: "haryana", state: "haryana", code: "10", cities: [
+                        {_id: "hisar", city: "hisar", code: "1662"},
+                        {_id: "sirsa", city: "sirsa", code: "1664"},
+                        {_id: "rohtak", city: "rohtak", code: "1262"},
+                        {_id: "ggn", city: "ggn", code: "124"}
                     ]}
                 ]},
-                {_id:"USA", country:"USA", code:"0011", states:[
-                    {_id:"new york", state:"new york", code:"12", cities:[
-                        {_id:"manhattan", city:"manhattan", code:"1662"},
-                        {_id:"brooklyn", city:"brooklyn", code:"1664"}
+                {_id: "USA", country: "USA", code: "0011", states: [
+                    {_id: "new york", state: "new york", code: "12", cities: [
+                        {_id: "manhattan", city: "manhattan", code: "1662"},
+                        {_id: "brooklyn", city: "brooklyn", code: "1664"}
                     ]},
-                    {_id:"washington", state:"washington", code:"132", cities:[
-                        {_id:"florida", city:"florida", code:"1754"},
-                        {"_id":"dc", city:"dc1"}
+                    {_id: "washington", state: "washington", code: "132", cities: [
+                        {_id: "florida", city: "florida", code: "1754"},
+                        {"_id": "dc", city: "dc1"}
                     ]}
                 ]}
             ],
-            languages:[
-                {_id:"hindi", language:"hindi"},
-                {_id:"engish", language:"english"}
+            languages: [
+                {_id: "hindi", language: "hindi"},
+                {_id: "engish", language: "english"}
             ],
-            score:10
+            score: 10
         };
         var personUpdates = {
-            _id:"rohit",
-            $set:{
-                "address":{$set:{line1:"z1"}, $unset:{line2:""}},
-                status:"married",
-                schools:{$insert:[
-                    {_id:"dav", school:"dav", score:"17"}
-                ], $update:[
-                    {_id:"sdm", $set:{school:"SDM"}, $unset:{status:""}
+            _id: "rohit",
+            $set: {
+                "address": {$set: {line1: "z1"}, $unset: {line2: ""}},
+                status: "married",
+                schools: {$insert: [
+                    {_id: "dav", school: "dav", score: "17"}
+                ], $update: [
+                    {_id: "sdm", $set: {school: "SDM"}, $unset: {status: ""}
 //                        , $inc: {score: 10}
                     }
-                ], $delete:[
-                    {_id:"pcsd"}
+                ], $delete: [
+                    {_id: "pcsd"}
                 ]},
-                countries:{$insert:[
-                    {_id:"Pakistan", country:"Pakistan", code:"92", states:[
-                        {_id:"lahore", state:"lahore", code:"12", cities:[
-                            {_id:"multan", city:"multan", code:"1662"}
+                countries: {$insert: [
+                    {_id: "Pakistan", country: "Pakistan", code: "92", states: [
+                        {_id: "lahore", state: "lahore", code: "12", cities: [
+                            {_id: "multan", city: "multan", code: "1662"}
                         ]}
                     ]}
-                ], $update:[
-                    {_id:"USA", $set:{states:{$insert:[
-                        {_id:"canada", state:"canada", code:"121", cities:[
-                            {_id:"mini-punjab", city:"mini-punjab", code:"18852"}
+                ], $update: [
+                    {_id: "USA", $set: {states: {$insert: [
+                        {_id: "canada", state: "canada", code: "121", cities: [
+                            {_id: "mini-punjab", city: "mini-punjab", code: "18852"}
                         ]}
-                    ], $delete:[
-                        {_id:"new york"}
-                    ], $update:[
-                        {"_id":"washington", $set:{"cities":{"$insert":[
-                            {_id:"abc", city:"abc", code:"1864084"}
-                        ], $delete:[
-                            {"_id":"florida"}
-                        ], $update:[
-                            {"_id":"dc", "$set":{city:"dc1"}}
+                    ], $delete: [
+                        {_id: "new york"}
+                    ], $update: [
+                        {"_id": "washington", $set: {"cities": {"$insert": [
+                            {_id: "abc", city: "abc", code: "1864084"}
+                        ], $delete: [
+                            {"_id": "florida"}
+                        ], $update: [
+                            {"_id": "dc", "$set": {city: "dc1"}}
                         ]}}}
                     ]}}}
                     ,
-                    {_id:"india", $set:{states:{$insert:[
-                        {_id:"himachal", state:"himachal", code:"099", cities:[
-                            {_id:"kasol", city:"kasol", code:"876"}
+                    {_id: "india", $set: {states: {$insert: [
+                        {_id: "himachal", state: "himachal", code: "099", cities: [
+                            {_id: "kasol", city: "kasol", code: "876"}
                         ]}
-                    ], $delete:[], $update:[]}}}
-                ]}, languages:[
-                    {_id:"engish", language:"english"},
-                    {_id:"german", language:"german"}
+                    ], $delete: [], $update: []}}}
+                ]}, languages: [
+                    {_id: "engish", language: "english"},
+                    {_id: "german", language: "german"}
                 ]
 
             },
-            $unset:{age:"", gameinfo:""}
+            $unset: {age: "", gameinfo: ""}
 
 //            ,$inc: {score: 10}
         };
@@ -743,8 +743,8 @@ describe("Documenttestcase", function () {
         done();
     });
     it("query in case of insert", function (done) {
-        var countries = {"_id":"india", "country":"india", "city":{$query:{"_id":"hisar"}, $set:{"city":"hisar"}}};
-        var persons = {_id:"india", $set:{"country":"india"}};
+        var countries = {"_id": "india", "country": "india", "city": {$query: {"_id": "hisar"}, $set: {"city": "hisar"}}};
+        var persons = {_id: "india", $set: {"country": "india"}};
         var document = new Document(countries, null, "insert");
         var jsonDocument = document.convertToJSON();
         expect(jsonDocument.country).to.eql("india");
@@ -754,8 +754,8 @@ describe("Documenttestcase", function () {
         done();
     });
     it("nested query in case of insert", function (done) {
-        var countries = {"_id":"india", "country":"india", "city":{$query:{"_id":"hisar"}, $set:{"city":"hisar"}, accountid:{"$query":{"_id":"SBI"}, $set:{"account":"salary"}}}};
-        var persons = {_id:"india", $set:{"country":"india"}};
+        var countries = {"_id": "india", "country": "india", "city": {$query: {"_id": "hisar"}, $set: {"city": "hisar"}, accountid: {"$query": {"_id": "SBI"}, $set: {"account": "salary"}}}};
+        var persons = {_id: "india", $set: {"country": "india"}};
         var document = new Document(countries, null, "insert");
         var jsonDocument = document.convertToJSON();
         expect(jsonDocument.country).to.eql("india");
@@ -768,12 +768,12 @@ describe("Documenttestcase", function () {
         done();
     });
     it("test case for convert to JSON", function (done) {
-        var countries = {"_id":"india", "country":"india", states:[
-            {"state":"haryana"},
-            {"state":"ambala"},
-            {"state":"sirsa"}
+        var countries = {"_id": "india", "country": "india", states: [
+            {"state": "haryana"},
+            {"state": "ambala"},
+            {"state": "sirsa"}
         ]};
-        var countryUpdates = {"_id":"india", $set:{"country":"youngistan", "city":{$query:{"_id":"hisar"}, $set:{"city":"hisar"}, accountid:{"$query":{"_id":"SBI"}, $set:{"account":"salary"}}}}};
+        var countryUpdates = {"_id": "india", $set: {"country": "youngistan", "city": {$query: {"_id": "hisar"}, $set: {"city": "hisar"}, accountid: {"$query": {"_id": "SBI"}, $set: {"account": "salary"}}}}};
         var document = new Document(countryUpdates, countries, "update");
         expect(document.getDocuments("states", ["nochange"])).to.have.length(3);
         expect(document.getDocuments("states", ["insert"])).to.have.length(0);
@@ -790,52 +790,52 @@ describe("Documenttestcase", function () {
         done();
     })
     it("getvalue from required fields", function (done) {
-        var document = new Document({"_id":"customer1"}, null, "insert", {"_id":"customer1", "name":"bansal-and-sons", "accountid":{"_id":"SBI", "account":"SBI", "type":"Salary"}});
+        var document = new Document({"_id": "customer1"}, null, "insert", {"_id": "customer1", "name": "bansal-and-sons", "accountid": {"_id": "SBI", "account": "SBI", "type": "Salary"}});
         expect(document.get("name")).to.eql("bansal-and-sons");
         done();
 
     })
 
     it("getValue from required field in case of updates", function (done) {
-        var updates = {_id:"myinvoice", $set:{    invoicelineitems:{$insert:[
-            {"_id":3, lineitemno:"3", purchases:[
-                {"_id":5, purchaseno:"5", productid:{"_id":"computer"}    },
-                {"_id":6, purchaseno:"6", productid:{"_id":"notebooks"}    }
-            ], amount:20000    }
-        ], $update:[
-            {   $query:{lineitemno:"2"}, $set:{    purchases:{$insert:[
-                {    "_id":7, purchaseno:"7", productid:{"_id":"notebooks"}}
-            ], $update:[
-                {    $query:{purchaseno:"3"}, $set:{        productid:{_id:"computer"}    }}
+        var updates = {_id: "myinvoice", $set: {    invoicelineitems: {$insert: [
+            {"_id": 3, lineitemno: "3", purchases: [
+                {"_id": 5, purchaseno: "5", productid: {"_id": "computer"}    },
+                {"_id": 6, purchaseno: "6", productid: {"_id": "notebooks"}    }
+            ], amount: 20000    }
+        ], $update: [
+            {   $query: {lineitemno: "2"}, $set: {    purchases: {$insert: [
+                {    "_id": 7, purchaseno: "7", productid: {"_id": "notebooks"}}
+            ], $update: [
+                {    $query: {purchaseno: "3"}, $set: {        productid: {_id: "computer"}    }}
             ]    }}    }
         ]    }}                             };
 
-        var oldRecord = {"_id":"myinvoice", "invoiceno":"001", "date":"2013-12-10T00:00:00.000Z", "invoicelineitems":[
-            {"_id":1, "lineitemno":"1", "purchases":[
-                {"_id":1, "purchaseno":"1", "productid":{"_id":"computer"}},
-                {"_id":2, "purchaseno":"2", "productid":{"_id":"laptop"}}
-            ], "amount":20000 },
-            {"_id":2, "lineitemno":"2", "purchases":[
-                {"_id":3, "purchaseno":"3", "productid":{"_id":"chairs"}},
-                {"_id":4, "purchaseno":"4", "productid":{"_id":"ac"}}
-            ], "amount":50000}
+        var oldRecord = {"_id": "myinvoice", "invoiceno": "001", "date": "2013-12-10T00:00:00.000Z", "invoicelineitems": [
+            {"_id": 1, "lineitemno": "1", "purchases": [
+                {"_id": 1, "purchaseno": "1", "productid": {"_id": "computer"}},
+                {"_id": 2, "purchaseno": "2", "productid": {"_id": "laptop"}}
+            ], "amount": 20000 },
+            {"_id": 2, "lineitemno": "2", "purchases": [
+                {"_id": 3, "purchaseno": "3", "productid": {"_id": "chairs"}},
+                {"_id": 4, "purchaseno": "4", "productid": {"_id": "ac"}}
+            ], "amount": 50000}
         ]};
 
-        var requiredValues = {"invoicelineitems":[
-            {"_id":3, "lineitemno":"3", "purchases":[
-                {"_id":5, "purchaseno":"5", "productid":{"_id":"computer", "name":"computer", "type":"device", "accountid":{"_id":"SBI", "account":"SBI", "type":"asset", "accountgroupid":{"_id":"Asset", "name":"Asset"}}}},
-                {"_id":6, "purchaseno":"6", "productid":{"_id":"notebooks", "name":"notebooks", "type":"utility", "accountid":{"_id":"SBI", "account":"SBI", "type":"asset", "accountgroupid":{"_id":"Asset", "name":"Asset"}}}}
-            ], "amount":20000},
-            {"lineitemno":"2", "purchases":[
-                {"_id":7, "purchas eno":"7", "productid":{"_id":"notebooks", "name":"notebooks", "type":"utility", "accountid":{"_id":"SBI", "account":"SBI", "type":"asset", "accountgroupid":{"_id":"Asset", "name":"Asset"}}}},
-                {"purchaseno":"3", "productid":{"_id":"computer", "name":"computer", "type":"device", "accountid":{"_id":"SBI", "account":"SBI", "type":"asset", "accountgroupid":{"_id":"Asset", "name":"Asset"}}}, "_id":3},
-                {"_id":4, "purchaseno":"4", "productid":{"_id":"ac", "name":"ac", "type":"coolingdevice", "accountid":{"_id":"PNB", "account":"PNB", "type":"expense", "accountgroupid":{"_id":"Expense", "name":"Expense"}}}}
-            ], "_id":2, "amount":50000},
-            {"_id":1, "lineitemno":"1", "purchases":[
-                {"_id":1, "purchaseno":"1", "productid":{"_id":"computer", "name":"computer", "type":"device", "accountid":{"_id":"SBI", "account":"SBI", "type":"asset", "accountgroupid":{"_id":"Asset", "name":"Asset"}}}},
-                {"_id":2, "purchaseno":"2", "productid":{"_id":"laptop", "name":"laptop", "type":"portabledevice", "accountid":{"_id":"PNB", "account":"PNB", "type":"expense", "accountgroupid":{"_id":"Expense", "name":"Expense"}}}}
-            ], "amount":20000}
-        ], "_id":"myinvoice", "invoiceno":"001", "date":"2013-12-10T00:00:00.000Z"};
+        var requiredValues = {"invoicelineitems": [
+            {"_id": 3, "lineitemno": "3", "purchases": [
+                {"_id": 5, "purchaseno": "5", "productid": {"_id": "computer", "name": "computer", "type": "device", "accountid": {"_id": "SBI", "account": "SBI", "type": "asset", "accountgroupid": {"_id": "Asset", "name": "Asset"}}}},
+                {"_id": 6, "purchaseno": "6", "productid": {"_id": "notebooks", "name": "notebooks", "type": "utility", "accountid": {"_id": "SBI", "account": "SBI", "type": "asset", "accountgroupid": {"_id": "Asset", "name": "Asset"}}}}
+            ], "amount": 20000},
+            {"lineitemno": "2", "purchases": [
+                {"_id": 7, "purchas eno": "7", "productid": {"_id": "notebooks", "name": "notebooks", "type": "utility", "accountid": {"_id": "SBI", "account": "SBI", "type": "asset", "accountgroupid": {"_id": "Asset", "name": "Asset"}}}},
+                {"purchaseno": "3", "productid": {"_id": "computer", "name": "computer", "type": "device", "accountid": {"_id": "SBI", "account": "SBI", "type": "asset", "accountgroupid": {"_id": "Asset", "name": "Asset"}}}, "_id": 3},
+                {"_id": 4, "purchaseno": "4", "productid": {"_id": "ac", "name": "ac", "type": "coolingdevice", "accountid": {"_id": "PNB", "account": "PNB", "type": "expense", "accountgroupid": {"_id": "Expense", "name": "Expense"}}}}
+            ], "_id": 2, "amount": 50000},
+            {"_id": 1, "lineitemno": "1", "purchases": [
+                {"_id": 1, "purchaseno": "1", "productid": {"_id": "computer", "name": "computer", "type": "device", "accountid": {"_id": "SBI", "account": "SBI", "type": "asset", "accountgroupid": {"_id": "Asset", "name": "Asset"}}}},
+                {"_id": 2, "purchaseno": "2", "productid": {"_id": "laptop", "name": "laptop", "type": "portabledevice", "accountid": {"_id": "PNB", "account": "PNB", "type": "expense", "accountgroupid": {"_id": "Expense", "name": "Expense"}}}}
+            ], "amount": 20000}
+        ], "_id": "myinvoice", "invoiceno": "001", "date": "2013-12-10T00:00:00.000Z"};
 
         var document = new Document(updates, oldRecord, "update", requiredValues);
         expect(document.getDocuments("invoicelineitems", ["update"])).to.have.length(1);
@@ -845,23 +845,23 @@ describe("Documenttestcase", function () {
 
     it("case from kapil dalal", function (done) {
         var old = {
-            _id:"1",
-            employee_id:{$query:{"_id":"1"}},
-            reporting_to_id:{$insert:[
-                {$query:{"_id":"1"}}
+            _id: "1",
+            employee_id: {$query: {"_id": "1"}},
+            reporting_to_id: {$insert: [
+                {$query: {"_id": "1"}}
             ]},
-            date:"2014-02-02",
-            from_date:"2014-02-02",
-            to_date:"2014-02-02",
-            request_date:"2014-02-02",
+            date: "2014-02-02",
+            from_date: "2014-02-02",
+            to_date: "2014-02-02",
+            request_date: "2014-02-02",
 //                            shift_id: {$query: {"_id": "1"}},
-            status_id:{$query:{"_id":"1"}}
+            status_id: {$query: {"_id": "1"}}
         };
         var updates = {
-            _id:"1",
-            $set:{
-                status_id:{$query:{"_id":"2"}},
-                remarks:"approvedddddddddd"
+            _id: "1",
+            $set: {
+                status_id: {$query: {"_id": "2"}},
+                remarks: "approvedddddddddd"
             }
         };
         var document = new Document(updates, old, "update");
@@ -873,16 +873,16 @@ describe("Documenttestcase", function () {
 
     it("case from sachinbansal", function (done) {
         var old = {
-            _id:"1",
-            employee_id:{$query:{"_id":"1"}},
-            reporting_to_id:{$insert:[
-                {$query:{"_id":"1"}}
+            _id: "1",
+            employee_id: {$query: {"_id": "1"}},
+            reporting_to_id: {$insert: [
+                {$query: {"_id": "1"}}
             ]},
-            date:"2014-02-02",
-            from_date:"2014-02-02",
-            to_date:"2014-02-02",
-            request_date:"2014-02-02",
-            status_id:{$query:{"_id":"1"}}
+            date: "2014-02-02",
+            from_date: "2014-02-02",
+            to_date: "2014-02-02",
+            request_date: "2014-02-02",
+            status_id: {$query: {"_id": "1"}}
         };
         var document = new Document({}, old, "delete");
         var status = document.get("_id");
@@ -892,8 +892,8 @@ describe("Documenttestcase", function () {
 
 
     it("case no 2 from sachin bansal", function (done) {
-        var old = {_id:"india", "country":"india", "address":{"city":"hisar", "state":"hrayana"}};
-        var updates = {"_id":"india", $set:{"country":"india1"}};
+        var old = {_id: "india", "country": "india", "address": {"city": "hisar", "state": "hrayana"}};
+        var updates = {"_id": "india", $set: {"country": "india1"}};
         var document = new Document(updates, old, "update");
         expect(document.getDocuments("address", ["insert", "update"])).to.eql(undefined);
         expect(document.getDocuments("address", ["nochange"]).get("city")).to.eql("hisar");
@@ -902,7 +902,7 @@ describe("Documenttestcase", function () {
 
 
     it("error while set value to 0 from kapil dalal", function (done) {
-        var old = {_id:1, country:"USA", rate:{"amount":0, type:{_id:111, currency:"INR"}}};
+        var old = {_id: 1, country: "USA", rate: {"amount": 0, type: {_id: 111, currency: "INR"}}};
         var document = new Document(old, null, "insert");
         console.log("rate document >>> " + JSON.stringify(document.getDocuments("rate")));
         var rateDocument = document.getDocuments("rate");
@@ -971,8 +971,8 @@ describe("Documenttestcase", function () {
     });
 
     it("override case in object in documenttest case", function (done) {
-        var old = {_id:1, "task":"Implement UDT Module", "estimatedefforts":{"time":"5", "unit":"Hrs"}};
-        var update = {_id:1, $set:{ "estimatedefforts":{"time":"10", unit:"Hrs"}}};
+        var old = {_id: 1, "task": "Implement UDT Module", "estimatedefforts": {"time": "5", "unit": "Hrs"}};
+        var update = {_id: 1, $set: { "estimatedefforts": {"time": "10", unit: "Hrs"}}};
         var document = new Document(update, old, "update");
         var updatedfields = document.getUpdatedFields();
         var estimatedEfforts = document.getDocuments(updatedfields);
@@ -981,8 +981,8 @@ describe("Documenttestcase", function () {
     });
 
     it("get updated value testcase", function (done) {
-        var old = {"_id":1, "country":"USA", "code":1, "state":{"state":"haryana", "rank":100, "city":{"city":"hisar", "score":200, "address":{"lineno":300, "area":"near ketarpaul hospital"}}}};
-        var updates = {"_id":1, "$inc":{"code":10}, "$set":{ "country":"india", "state":{"$set":{"state":"LA", "city":{"$set":{"city":"toronto", "address":{"$set":{"area":"daffodil"}, "$inc":{"lineno":10}}}, "$inc":{"score":10}}}, "$inc":{"rank":10}}}};
+        var old = {"_id": 1, "country": "USA", "code": 1, "state": {"state": "haryana", "rank": 100, "city": {"city": "hisar", "score": 200, "address": {"lineno": 300, "area": "near ketarpaul hospital"}}}};
+        var updates = {"_id": 1, "$inc": {"code": 10}, "$set": { "country": "india", "state": {"$set": {"state": "LA", "city": {"$set": {"city": "toronto", "address": {"$set": {"area": "daffodil"}, "$inc": {"lineno": 10}}}, "$inc": {"score": 10}}}, "$inc": {"rank": 10}}}};
         var document = new Document(updates, old, "update");
         console.log("updatedFields>>>>" + document.getUpdatedFields());
         var stateDocument = document.getDocuments("state");
@@ -991,8 +991,8 @@ describe("Documenttestcase", function () {
     })
 
     it("unset fk column document testcase", function (done) {
-        var oldRecord = {_id:"111", artistid:{_id:"123123"}};
-        var update = {_id:"111", $unset:{"artistid":1}};
+        var oldRecord = {_id: "111", artistid: {_id: "123123"}};
+        var update = {_id: "111", $unset: {"artistid": 1}};
         var document = new Document(update, oldRecord, "update");
         console.log("artistdocument " + JSON.stringify(document.getDocuments("artistid")));
         var artistDocument = document.getDocuments("artistid");
@@ -1001,8 +1001,8 @@ describe("Documenttestcase", function () {
     });
 
     it("case of set fk column document testcase", function (done) {
-        var oldRecord = {_id:"111", artistid:{_id:"123123"}};
-        var update = {_id:"111", $set:{"artistid":{$set:{_id:1}}}};
+        var oldRecord = {_id: "111", artistid: {_id: "123123"}};
+        var update = {_id: "111", $set: {"artistid": {$set: {_id: 1}}}};
         var document = new Document(update, oldRecord, "update");
         var artistDocument = document.getDocuments("artistid");
         console.log("artist document>>>>>>>>>." + JSON.stringify(artistDocument));
@@ -1011,19 +1011,19 @@ describe("Documenttestcase", function () {
     });
 
     it("error case of array documents", function (done) {
-        var updates = {"_id":"5376f2435e5bb1252322daf0", "$set":{"voucher_id":{"_id":"5376f2435e5bb1252322db2c"}}};
-        var oldRecord = {"currency_rate":"1", "entity_id":{"_id":"5371df8146f92a020007bdb7", "name":"Rohit Bansal"}, "invoice_amount_invoice_currency":{"amount":100, "type":{"currency":"INR", "_id":"536a35cfbc14dd0200bf4e94"}}, "invoice_date":"2014-04-30T18:30:00.000Z", "invoice_details":[
-            {"amount":{"amount":100, "type":{"currency":"INR", "_id":"536a35cfbc14dd0200bf4e94"}}, "delivery_id":{"_id":"53760f3048beba061682a3f1", "delivery_number":"Order/1/M1"}, "_id":"5376f2435e5bb1252322dade"}
-        ], "invoice_type":"Invoice", "location_id":{"name":"Hisar", "_id":"536a2d67d386e802007a293d"}, "total_invoice_amount_invoice_currency":{"amount":100, "type":{"currency":"INR", "_id":"536a35cfbc14dd0200bf4e94"}}, "profit_center_id":{"_id":"536a2e2dd386e802007a2949", "name":"Services"}, "payment_due_date":"2014-05-01T18:30:00.000Z", "sales_owner_id":{"name":"Kapil Dalal", "_id":"53749944b3f5bb0200bd9e0f"}, "_id":"5376f2435e5bb1252322daf0"};
+        var updates = {"_id": "5376f2435e5bb1252322daf0", "$set": {"voucher_id": {"_id": "5376f2435e5bb1252322db2c"}}};
+        var oldRecord = {"currency_rate": "1", "entity_id": {"_id": "5371df8146f92a020007bdb7", "name": "Rohit Bansal"}, "invoice_amount_invoice_currency": {"amount": 100, "type": {"currency": "INR", "_id": "536a35cfbc14dd0200bf4e94"}}, "invoice_date": "2014-04-30T18:30:00.000Z", "invoice_details": [
+            {"amount": {"amount": 100, "type": {"currency": "INR", "_id": "536a35cfbc14dd0200bf4e94"}}, "delivery_id": {"_id": "53760f3048beba061682a3f1", "delivery_number": "Order/1/M1"}, "_id": "5376f2435e5bb1252322dade"}
+        ], "invoice_type": "Invoice", "location_id": {"name": "Hisar", "_id": "536a2d67d386e802007a293d"}, "total_invoice_amount_invoice_currency": {"amount": 100, "type": {"currency": "INR", "_id": "536a35cfbc14dd0200bf4e94"}}, "profit_center_id": {"_id": "536a2e2dd386e802007a2949", "name": "Services"}, "payment_due_date": "2014-05-01T18:30:00.000Z", "sales_owner_id": {"name": "Kapil Dalal", "_id": "53749944b3f5bb0200bd9e0f"}, "_id": "5376f2435e5bb1252322daf0"};
         var document = new Document(updates, oldRecord, "update");
         console.log("doucmners>>>>>>>>>>>>>>" + JSON.stringify(document.getDocuments("invoice_details")));
         done();
     })
     it("delete documents found", function (done) {
-        var update = {_id:"123", $set:{invoiceno:"321"}};
-        var oldRecord = {_id:"123", invoiceno:"123", invoicedetails:[
-            {_id:"1111", deliveryno:"1111"},
-            {_id:"2222", deliveryno:"2222"}
+        var update = {_id: "123", $set: {invoiceno: "321"}};
+        var oldRecord = {_id: "123", invoiceno: "123", invoicedetails: [
+            {_id: "1111", deliveryno: "1111"},
+            {_id: "2222", deliveryno: "2222"}
         ]};
         var document = new Document(update, oldRecord, "update");
         console.log("document>>>>>>>>>>>>>>>" + JSON.stringify(document));
@@ -1033,12 +1033,12 @@ describe("Documenttestcase", function () {
 
 
     it("match array records case for default value", function (done) {
-        var update = {_id:"123", $set:{lineitems:{"$insert":[
-            {_id:"11", "amount":{amount:5500}}
+        var update = {_id: "123", $set: {lineitems: {"$insert": [
+            {_id: "11", "amount": {amount: 5500}}
         ]}
         }};
-        var oldRecord = {_id:"123", lineitems:[
-            {_id:"11", "amount":{amount:5500}}
+        var oldRecord = {_id: "123", lineitems: [
+            {_id: "11", "amount": {amount: 5500}}
         ]};
         var document = new Document(update, oldRecord, "insert");
         var lineItemInsertDocs = document.getDocuments("lineitems", ["nochange"]);
@@ -1050,15 +1050,15 @@ describe("Documenttestcase", function () {
 
 
     it("match array records case for default value with dollar insert in oldValue", function (done) {
-        var update = {"invoice_no":1111, "profitcenterid":{"_id":"Services", "profitcenter":"Services"}, "invoicelineitems":{"$insert":[
-            {"lineitemno":1, "amount":{"amount":10000, "type":{"_id":"INR", "currency":"INR"}}, "other_deductions":{"$insert":[
-                {"deduction_amt":{"amount":200, "type":{"_id":"INR", "currency":"INR"}}, "_id":"537daef2f3dedaf82ad7c217"}
-            ]}, "_id":"537daef2f3dedaf82ad7c216"}
+        var update = {"invoice_no": 1111, "profitcenterid": {"_id": "Services", "profitcenter": "Services"}, "invoicelineitems": {"$insert": [
+            {"lineitemno": 1, "amount": {"amount": 10000, "type": {"_id": "INR", "currency": "INR"}}, "other_deductions": {"$insert": [
+                {"deduction_amt": {"amount": 200, "type": {"_id": "INR", "currency": "INR"}}, "_id": "537daef2f3dedaf82ad7c217"}
+            ]}, "_id": "537daef2f3dedaf82ad7c216"}
         ]}};
-        var oldRecord = {"invoice_no":1111, "profitcenterid":{"_id":"Services", "profitcenter":"Services"}, "invoicelineitems":{"$insert":[
-            {"lineitemno":1, "amount":{"amount":10000, "type":{"_id":"INR", "currency":"INR"}}, "other_deductions":{"$insert":[
-                {"deduction_amt":{"amount":200, "type":{"_id":"INR", "currency":"INR"}}, "_id":"537daef2f3dedaf82ad7c217"}
-            ]}, "_id":"537daef2f3dedaf82ad7c216"}
+        var oldRecord = {"invoice_no": 1111, "profitcenterid": {"_id": "Services", "profitcenter": "Services"}, "invoicelineitems": {"$insert": [
+            {"lineitemno": 1, "amount": {"amount": 10000, "type": {"_id": "INR", "currency": "INR"}}, "other_deductions": {"$insert": [
+                {"deduction_amt": {"amount": 200, "type": {"_id": "INR", "currency": "INR"}}, "_id": "537daef2f3dedaf82ad7c217"}
+            ]}, "_id": "537daef2f3dedaf82ad7c216"}
         ]}};
         var document = new Document(update, oldRecord, "insert");
         var lineItemDocs = document.getDocuments("invoicelineitems");
@@ -1072,15 +1072,15 @@ describe("Documenttestcase", function () {
 
 
     it("match array records case for default value with dollar insert in oldValue and dollar update in update", function (done) {
-        var update = {"invoice_no":1111, "profitcenterid":{"_id":"Services", "profitcenter":"Services"}, "invoicelineitems":{"$update":[
-            {"lineitemno":1, "amount":{"amount":10000, "type":{"_id":"INR", "currency":"INR"}}, "other_deductions":{"$update":[
-                {"deduction_amt":{"amount":200, "type":{"_id":"INR", "currency":"INR"}}, "_id":"537daef2f3dedaf82ad7c217"}
-            ]}, "_id":"537daef2f3dedaf82ad7c216"}
+        var update = {"invoice_no": 1111, "profitcenterid": {"_id": "Services", "profitcenter": "Services"}, "invoicelineitems": {"$update": [
+            {"lineitemno": 1, "amount": {"amount": 10000, "type": {"_id": "INR", "currency": "INR"}}, "other_deductions": {"$update": [
+                {"deduction_amt": {"amount": 200, "type": {"_id": "INR", "currency": "INR"}}, "_id": "537daef2f3dedaf82ad7c217"}
+            ]}, "_id": "537daef2f3dedaf82ad7c216"}
         ]}};
-        var oldRecord = {"invoice_no":1111, "profitcenterid":{"_id":"Services", "profitcenter":"Services"}, "invoicelineitems":{"$insert":[
-            {"lineitemno":1, "amount":{"amount":10000, "type":{"_id":"INR", "currency":"INR"}}, "other_deductions":{"$insert":[
-                {"deduction_amt":{"amount":200, "type":{"_id":"INR", "currency":"INR"}}, "_id":"537daef2f3dedaf82ad7c217"}
-            ]}, "_id":"537daef2f3dedaf82ad7c216"}
+        var oldRecord = {"invoice_no": 1111, "profitcenterid": {"_id": "Services", "profitcenter": "Services"}, "invoicelineitems": {"$insert": [
+            {"lineitemno": 1, "amount": {"amount": 10000, "type": {"_id": "INR", "currency": "INR"}}, "other_deductions": {"$insert": [
+                {"deduction_amt": {"amount": 200, "type": {"_id": "INR", "currency": "INR"}}, "_id": "537daef2f3dedaf82ad7c217"}
+            ]}, "_id": "537daef2f3dedaf82ad7c216"}
         ]}};
         var document = new Document(update, oldRecord, "insert");
         var lineItemDocs = document.getDocuments("invoicelineitems");
@@ -1093,192 +1093,5 @@ describe("Documenttestcase", function () {
         expect(otherDeductionDocs[0].type).to.eql("nochange");
         done();
     })
-
-    it("convert to json of object/fk", function (done) {
-        var updates = {_id:"rohit", $set:{countryid:{_id:"india"}}}
-        var old = {_id:"rohit", countryid:{_id:"china", country:"china"}};
-        var document = new Document(updates, old, "update");
-        var json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.countryid.country).to.eql(undefined);
-        expect(json.countryid._id).to.eql("india");
-        expect(json._id).to.eql("rohit");
-
-
-        updates = {_id:"rohit", $set:{countryid:{$query:{_id:"india"}}}}
-        old = {_id:"rohit", countryid:{_id:"china", country:"china"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.countryid.country).to.eql(undefined);
-        expect(json.countryid._id).to.eql("india");
-        expect(json._id).to.eql("rohit");
-
-
-        updates = {_id:"rohit", $set:{countryid:{$query:{_id:"india"}, $set:{country:"india", code:91}}}}
-        old = {_id:"rohit", countryid:{_id:"china", country:"china"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.countryid.country).to.eql("india");
-        expect(json.countryid.code).to.eql(91);
-        expect(json.countryid._id).to.eql("india");
-        expect(json._id).to.eql("rohit");
-
-
-        updates = {_id:"rohit", $unset:{countryid:""}}
-        old = {_id:"rohit", countryid:{_id:"china", country:"china"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.countryid).to.eql(undefined);
-        expect(json._id).to.eql("rohit");
-
-
-        updates = {_id:"rohit"}
-        old = {_id:"rohit", countryid:{_id:"china", country:"china"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.countryid.country).to.eql("china");
-        expect(json.countryid._id).to.eql("china");
-        expect(json._id).to.eql("rohit");
-
-
-        updates = {_id:"rohit", $set:{address:{$set:{state:"haryana"}}}}
-        old = {_id:"rohit", address:{country:"india", city:"hisar"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.address.country).to.eql("india");
-        expect(json.address.state).to.eql("haryana");
-        expect(json.address.city).to.eql("hisar");
-        expect(json._id).to.eql("rohit");
-
-
-        updates = {_id:"rohit", $set:{address:{city:"new hisar", code:1662, state:"haryana"}}}
-        old = {_id:"rohit", address:{country:"india", state:"haryana", city:"hisar"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.address.country).to.eql(undefined);
-        expect(json.address.state).to.eql("haryana");
-        expect(json.address.city).to.eql("new hisar");
-        expect(json.address.code).to.eql(1662);
-        expect(json._id).to.eql("rohit");
-
-
-        updates = {_id:"rohit", $set:{name:"sachin"}}
-        old = {_id:"rohit", address:{country:"india", state:"haryana", city:"hisar"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.address.country).to.eql("india");
-        expect(json.address.state).to.eql("haryana");
-        expect(json.address.city).to.eql("hisar");
-        expect(json._id).to.eql("rohit");
-        expect(json.name).to.eql("sachin");
-
-
-        updates = {_id:"rohit", $set:{name:"sachin"}, $unset:{address:""}}
-        old = {_id:"rohit", address:{country:"india", state:"haryana", city:"hisar"}};
-        document = new Document(updates, old, "update");
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-        expect(json.address).to.eql(undefined);
-        expect(json._id).to.eql("rohit");
-        expect(json.name).to.eql("sachin");
-
-        updates = {};
-        old = {"_id":4, "purchaseno":"4", "productid":{"_id":"ac", "accountid":{"name":"PNB", "type":"expense", "accountgroupid":{"name":"Expense"}}, "type":"coolingdevice", "name":"ac"}};
-        var requiredValues = {"_id":4, "purchaseno":"4", "productid":{"_id":"ac", "name":"ac", "type":"coolingdevice", "accountid":{"_id":"PNB", "account":"PNB", "type":"expense", "accountgroupid":{"_id":"Expense", "name":"Expense"}}}};
-        document = new Document(updates, old, "nochange", requiredValues);
-        json = document.convertToJSON();
-        console.log("json>>" + JSON.stringify(json));
-
-        done();
-    })
-
-    it.skip("getDocuments testcase", function (done) {
-
-        var updates2 = {"_id":"5382c99042463d9036927187", "$unset":{"amt":"", "deductions":"", "line_no":"", "damt":"", "stax":"", "net":"", "netword":""}};
-        var oldRecord2 = {"amt":10500, "deductions":[
-            {"damt":500, "_id":"5382c99042463d9036927188", "deduction_no":1111, "vat":100, "dnetamt":600}
-        ], "_id":"5382c99042463d9036927187", "line_no":1111, "damt":500, "stax":1050, "net":9450, "netword":"Greater that 1000"};
-        var document2 = new Document(updates2, oldRecord2, "delete");
-        console.log("document >>>>>>>>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(document));
-        var deductions = document2.getDocuments("deductions",  ["insert", "update", "delete"]);
-        console.log("deductions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(deductions));
-
-        var updates = {"invoice_no":1111, "invoicelineitems":{"$insert":[
-            {"amt":1000, "deductions":{"$insert":[
-                {"damt":50, "_id":"5382663a818f07ec1d9b67d0", "deduction_no":1111, "vat":10, "dnetamt":60}
-            ], "$update":[], "$delete":[]}, "_id":"5382663a818f07ec1d9b67cf", "line_no":1111, "damt":50, "stax":100, "net":900, "netword":"Greater that 100"},
-            {"amt":5000, "deductions":{"$insert":[
-                {"damt":1000, "_id":"5382663a818f07ec1d9b67d2", "deduction_no":1111, "vat":200, "dnetamt":1200},
-                {"damt":200, "_id":"5382663a818f07ec1d9b67d3", "deduction_no":1111, "vat":40, "dnetamt":240}
-            ], "$update":[], "$delete":[]}, "_id":"5382663a818f07ec1d9b67d1", "line_no":1111, "damt":1200, "stax":500, "net":4500, "netword":"Greater that 1000"}
-        ], "$update":[], "$delete":[]}, "invoicelineitems1":{"$insert":[
-            {"amt":3000, "_id":"5382663a818f07ec1d9b67d4", "line_no":1111, "stax":300, "net":2700, "netword":"Greater that 1000"},
-            {"amt":8000, "_id":"5382663a818f07ec1d9b67d5", "line_no":1111, "stax":800, "net":7200, "netword":"Greater that 1000"}
-        ], "$update":[], "$delete":[]}, "invoice_date":"2014-05-25T21:52:58.754Z", "totalamt":17000, "damt":1250, "totalstax":1700, "totalnet":15300, "netword":"Greater that 1000"};
-        var oldRecord = {"invoice_no":1111, "invoicelineitems":[
-            {"amt":1000, "deductions":[
-                {"damt":50, "_id":"5382663a818f07ec1d9b67d0", "deduction_no":1111, "vat":10, "dnetamt":60}
-            ], "_id":"5382663a818f07ec1d9b67cf", "line_no":1111, "damt":50, "stax":100, "net":900, "netword":"Greater that 100"},
-            {"amt":5000, "deductions":[
-                {"da mt":1000, "_id":"5382663a818f07ec1d9b67d2", "deduction_no":1111, "vat":200, "dnetamt":1200},
-                {"damt":200, "_id":"5382663a818f07ec1d9b67d3", "deduction_no":1111, "vat":40, "dnetamt":240}
-            ], "_id":"5382663a818f07ec1d9b67d1", "line_no":1111, "damt":1200, "stax":500, "net":4500, "netword":"Greater that 1000"}
-        ], "invoice lineitems1":[
-            {"amt":3000, "_id":"5382663a818f07ec1d9b67d4", "line_no":1111, "stax":300, "net":2700, "netword":"Greater that 1000"},
-            {"amt":8000, "_id":"5382663a818f07ec1d9b67d5", "line_no":1111, "stax":800, "net":7200, "netword":"Greater that 1000"}
-        ], "invoice_date":"2014-05-25T21:52:58.754Z", "totalamt":17000, " damt":1250, "totalstax":1700, "totalnet":15300, "netword":"Greater that 1000"};
-        var document = new Document(updates, oldRecord, "insert");
-        console.log("document >>>>>>>>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(document));
-        var invoiceLineItems = document.getDocuments("invoicelineitems", ["insert"]);
-        console.log("lineitems>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(invoiceLineItems));
-
-        var updates1 = {"$set":{"invoicelineitems":{"$update":[
-            {"_id":"538268b9cead20b81e774f4d", "$set":{"amt":3000, "deductions":{"$update":[
-                {"_id":"538268b9cead20b81e774f4e", "damt":100, "vat":20, "dnetamt":120}
-            ], " $insert":[
-                {"damt":200, "_id":"538268bacead20b81e774f56", "deduction_no":1111, "vat":40, "dnetamt":240}
-            ], "$delete":[]}, "damt":300, "stax":300, "net":2700, "netword":"Greater that 1000"}},
-            {"_id":"538268b9cead20b81e774f4f", "$set":{"amt":1000, "deductions":{"$update":[
-                {"_id":"538268b9cead20b81e774f51", "damt":500, "vat":100, "dnetamt":600}
-            ], "$delete":[], "$insert":[]}, "damt":1500, "stax":100, "net":900, "netword":"Greater that 100"}}
-        ], "$insert":[
-            {"amt":20000, "deductions":[
-                {"damt":2000, "_id":"538268bacead20b81e774f58", "deduction_no":1111, "vat":400, "dnetamt":2400}
-            ], "_id":"538268bacead20b81e774f57", "line_no":1111, " damt":2000, "stax":2000, "net":18000, "netword":"Greater that 1000"}
-        ], "$delete":[]}, "invoicelineitems1":{"$update":[
-            {"_id":"538268b9cead20b81e774f53", "$set":{"amt":10000, "stax":1000, "net":9000, "netword":"Greater that 1000"}}
-        ], "$delete":[], "$insert":[]}, "totalamt":37000, "damt":3800, "totalstax":3700, "totalnet":33300, "netword":"Greater that 1000"}};
-
-        var oldRecord1 = {"invoicelineitems":[
-            {"_id":"538268b9cead20b81e774f4d", "amt":3000, "deductions":[
-                {"_id":"538268b9cead20b81e774f4e", "damt":100, "vat":20, "dnetamt":120, "deduction_no":1111},
-                {"damt":200, "_id":"538268bacead20b81e774f56", "deduction_no":1111, "vat":40, "dnetamt":240}
-            ], "damt":300, "stax":300, "net":2700, "netword":"Greater that 1000", "line_no":1111},
-            {"_id":"538268b9cead20b81e774f4f", "amt":1000, "deductions":[
-                {"damt":1000, "_id":"538268b9cead20b81e774f50", "deduction_no":1111, "vat":200, "dnetamt":1200},
-                {"_id":"538268b9cead20b81e774f51", "damt":500, "vat":100, "dnetamt":600, "deduction_no":1111}
-            ], "damt":1500, "stax":100, "net":900, "netword":"Greater that 100", "line_no":1111},
-            {"amt":20000, "deductions":[
-                {"damt":2000, "_id":"538268bacead20b81e774f58", "deduction_no":1111, "vat":400, "dnetamt":2400}
-            ], "_id":"538268bacead20b81e774f57", "line_no":1111, " damt":2000, "stax":2000, "net":18000, "netword":"Greater that 1000"}
-        ], "invoicelineitems1":[
-            {"amt":3000, "_id":"538268b9cead20b81e774f52", "line_no":1111, "stax":300, "net":2700, "netword":"Greater that 1000"},
-            {"_id":"538268b9cead20b81e774f53", "amt":10000, "stax":1000, "net":9000, "netword":"Greater that 1000", "line_no":1111}
-        ], "totalamt":37000, "damt":3800, "totalstax":3700, "totalnet":33300, "invoice_no":1111, "invoice_date":"2014-05-25T22:03:37.108Z", "netword":"Greater that 1000", "default_currency":"INR", "_id":"538268bacead20b81e774f54"}
-
-        var document1 = new Document(updates1, oldRecord1, "update");
-        console.log("document >>>>>>>>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(document1));
-        var invoiceLineItems = document1.getDocuments("invoicelineitems", ["insert","update"]);
-        console.log("lineitems>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + JSON.stringify(invoiceLineItems));
-
-        done();
-    });
 
 })

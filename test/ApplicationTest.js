@@ -12,7 +12,7 @@ var ApplaneDB = require("../lib/DB.js");
 var Config = require("./config.js");
 
 
-describe("Applicationtestcase", function () {
+describe("ApplicationTest", function () {
     afterEach(function (done) {
         ApplaneDB.connect(Config.URL, Config.DB, {username:"admin", password:"damin"}, function (err, db) {
             db.dropDatabase(function (err) {

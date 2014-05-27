@@ -7,7 +7,6 @@ var Constants = require("./lib/Constants.js");
 var TEST_UTILITY = require("./test/Utility.js");
 //var OPTIONS = {username:"rohit", password:"daffodil"};
 var OPTIONS = {};
-var Document = require("./lib/Document.js");
 
 var Config = {};
 Config.URL = "mongodb://127.0.0.1:27017";
@@ -60,29 +59,9 @@ var invoices1 = {
     ]
 }
 
-var bills = {
-    collection:"bills", fields:[
-        {field:"qty", type:"number"},
-        {field:"rate", type:"number"},
-        {field:"amount", type:"number"} ,
-        {field:"stax", type:"number"} ,
-        {field:"totalamount", type:"number"} ,
-
-//        {field:"invoicelineitems1", type:"object", multiple:true, fields:[
-//            {field:"invoice_no", type:"string"},
-//            {field:"amt", type:"number"},
-//            {field:"stax", type:"number"},
-//            {field:"net", type:"number"}
-//        ]}
-    ], events:[
-        {event:'onValue:["rate","qty"]', function:"Bills1.calculateAmt"}
-    ]
-}
-
 var functionsToRegister = [
     {name:"Bills", source:"NorthwindTestCase/lib", type:"js"},
-    {name:"Invoicess", source:"NorthwindTestCase/lib", type:"js"},
-    {name:"Bills1", source:"NorthwindTestCase/lib", type:"js"}
+    {name:"Invoicess", source:"NorthwindTestCase/lib", type:"js"}
 ]
 
 
@@ -107,7 +86,7 @@ ApplaneDB.connect(Config.URL, Config.DB, OPTIONS, function (err, db) {
             return;
         }
 
-        var type = "moduleinsert";
+        var type = "delete";
         if (type == "insert") {
             var invoice = {invoice_no:1111, invoicelineitems:{$insert:[
                 {amt:1000},
@@ -183,33 +162,6 @@ ApplaneDB.connect(Config.URL, Config.DB, OPTIONS, function (err, db) {
                 function () {
                     db.query({$collection:"invoices", $filter:{_id:"537e181feeae63941f0557ea"}, $sort:{_id:-1}, $limit:1}, function (err, result) {
                         if (err) {
-                            callback(err);
-                            return;
-                        }
-                        console.log("result >>>>>>>>>>>>>>>>>>>>" + JSON.stringify(result));
-                        ApplaneDB.getMethodToInvoke();
-                        callback();
-                    })
-                }).fail(function (e) {
-                    callback(e);
-                })
-        } else if (type == "doc") {
-            var updates = {_id:"rohit", $set:{countryid:{_id:"india"}}}
-            var updates = {_id:"rohit", $set:{countryid:{$query:{_id:"india"}, $set:{country:"India"}}}}
-            var old = {_id:"rohit", countryid:{_id:"china", country:"china"}};
-            var document = new Document(updates, old, "update");
-            var json = document.convertToJSON();
-            console.log("json>>" + JSON.stringify(json));
-        } else if (type == "moduleinsert") {
-            var bill = {qty:"100", rate:"50"}
-
-
-            db.updateAsPromise({$collection:bills, $insert:bill}).then(
-                function () {
-                    console.log("querying>>>>")
-                    db.query({$collection:"bills", $sort:{_id:-1}, $limit:1}, function (err, result) {
-                        if (err) {
-                            console.log("error cnoutnred")
                             callback(err);
                             return;
                         }

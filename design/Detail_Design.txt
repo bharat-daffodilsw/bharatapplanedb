@@ -511,22 +511,6 @@ http://www.raywenderlich.com/61078/write-simple-node-jsmongodb-web-service-ios-a
 
 ==============****Default value in datamodel(TriggerEvents-Client-Server)**********====================
 
-***************23-05**************
-    modules
-        fk -- module
-
-        event :"onValue"  onInsert, onSave
-
-        {cost:"100",qty:"200"} --> {cost:100,qty:200, amount:"2000"}
-        {$query{_id:"india"}} --> {_id:"india",}
-        cost, qty
-
-        fields :
-
-        type :"fk"
-
-        type :"number"
-
 
 ***************21-05**************
 {"result":[{"invoice_no":1111,"profitcenterid":{"_id":"Services","profitcenter":"Services"},"invoicelineitems":[{"lineitemno":1,"amount":{"amount":10000,"type":{"_id":"INR","currency":"INR"}},"other_deductions":[{"deduction_amt":{"amount":200,"type":{"_id":"INR","currency":"INR"}},"profitcenterid":{"_id":"Services","profitcenter":"Services"}}],"profitcenterid":{"_id":"Services","profitcenter":"Services"},"service_tax_amt":{"amount":1000,"type":{"_id":"INR","currency":"INR"}},"net_amt":{"amount":9000,"type":{"_id":"INR","currency":"INR"}}}],"total_invoice_amt":{"amount":20000,"type":{"_id":"INR","currency":"INR"}},"total_service_tax_amt":{"amount":2000,"type":{"_id":"INR","currency":"INR"}},"_id":"537c532fe73e8fcc1e0bc903"}]}

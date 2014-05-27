@@ -4,7 +4,6 @@ mongo 2.6 --> Role privilieges
 ashu :
 !----------------------------------!
 
-If new record is getting saved in table and their is index defined on collection, then ensure index on that collection
 Amit sir requirement
     Data Entry from applane website into crm : Need to discuss with Yogesh Sir
     Meta data Definition : Local and admin db merging , : Need to discuss with Amit Sir

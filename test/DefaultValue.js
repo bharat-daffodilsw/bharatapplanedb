@@ -24,8 +24,11 @@ var billCollection = {collection:"bills", fields:[], events:[
     {event:"onSave", post:true, function:"Bills.onPostSave"}
 ]};
 
-var invoices1 = {
-    collection:"invoices1", fields:[
+var collectionsToRegister = [
+    billCollection
+    ,
+    {
+        collection:"invoices", fields:[
         {field:"invoice_no", type:"string"},
         {field:"invoice_date", type:"date"},
         {field:"invoice_currency", type:"fk", collection:"pl.currencies", set:["currency"]},
@@ -68,58 +71,7 @@ var invoices1 = {
         {event:'onValue:[{"invoicelineitems":["total_other_deduction_staxamt"]}]', function:"Invoices.calcaulateInvoiceOtherDeductionStaxAmt"},
         {event:'onValue:[{"invoicelineitems":["total_invoice_amt","total_service_tax_amt","total_other_deductions_amt","total_other_deductions_staxamt"]}]', function:"Invoices.calculateInvoiceNetAmt"}
     ]
-}
-
-var invoices = {
-    collection:"invoices", fields:[
-        {field:"invoice_no", type:"string"},
-        {field:"invoice_date", type:"date"},
-        {field:"totalamt", type:"number"} ,
-        {field:"totalstax", type:"number"} ,
-        {field:"totalnet", type:"number"},
-        {field:"damt", type:"number"},
-        {field:"invoicelineitems", type:"object", multiple:true, fields:[
-            {field:"line_no", type:"string"},
-            {field:"amt", type:"number"},
-            {field:"stax", type:"number"},
-            {field:"net", type:"number"},
-            {field:"damt", type:"number"},
-            {field:"deductions", multiple:true, type:"object", fields:[
-                {field:"deduction_no", type:"string"},
-                {field:"damt", type:"number"}
-            ]}
-        ]},
-        {field:"invoicelineitems1", type:"object", multiple:true, fields:[
-            {field:"invoice_no", type:"string"},
-            {field:"amt", type:"number"},
-            {field:"stax", type:"number"},
-            {field:"net", type:"number"}
-        ]}
-    ], events:[
-        {event:'onInsert', function:"Invoicess.onInsertInvoice"},
-        {event:'onInsert:[{"invoicelineitems":[]},{"invoicelineitems1":[]}]', function:"Invoicess.onInsertLineItems"},
-        {event:'onInsert:[{"invoicelineitems":[{"deductions":[]}]}]', function:"Invoicess.onInsertDeductions"},
-        {event:'onValue:[{"invoicelineitems":[{"deductions":["damt"]}]}]', function:"Invoicess.deductionVat"},
-        {event:'onValue:[{"invoicelineitems":[{"deductions":["damt"]}]}]', function:"Invoicess.lineItemDamt"},
-        {event:'onValue:[{"invoicelineitems":["damt"]}]', function:"Invoicess.lineItemDamt"},
-        {event:'onValue:[{"invoicelineitems":[{"deductions":["vat"]}]}]', function:"Invoicess.deductionnetamt"},
-        {event:'onValue:["totalstax"]', function:"Invoicess.invoiceNetAmt"},
-        {event:'onValue:[{"invoicelineitems":["amt"]},{"invoicelineitems1":["amt"]}]', function:"Invoicess.lineItemStax"},
-        {event:'onValue:[{"invoicelineitems":["stax"]},{"invoicelineitems1":["stax"]}]', function:"Invoicess.lineItemNet"},
-        {event:'onValue:[{"invoicelineitems":["amt"]},{"invoicelineitems1":["amt"]}]', function:"Invoicess.invoiceAmt"},
-        {event:'onValue:[{"invoicelineitems":["stax"]},{"invoicelineitems1":["stax"]}]', function:"Invoicess.invoiceStaxAmt"},
-        {event:'onValue:[{"invoicelineitems":["net"]},{"invoicelineitems1":["net"]}]', function:"Invoicess.LineItemNetWord"},
-        {event:'onValue:["totalnet"]', function:"Invoicess.NetWord"},
-        {event:"onSave", pre:true, function:"Invoicess.onPreSave"},
-        {event:"onSave", post:true, function:"Invoicess.onPostSave"}
-    ]
-}
-
-var collectionsToRegister = [
-    billCollection
-    ,
-    invoices,
-    invoices1,
+    } ,
     {
         collection:"orders", fields:[
         {field:"order_no", type:"string"},
@@ -193,8 +145,7 @@ var collectionsToRegister = [
 
 var functionsToRegister = [
     {name:"Bills", source:"NorthwindTestCase/lib", type:"js"},
-    {name:"Invoices", source:"NorthwindTestCase/lib", type:"js"},
-    {name:"Invoicess", source:"NorthwindTestCase/lib", type:"js"}
+    {name:"Invoices", source:"NorthwindTestCase/lib", type:"js"}
 ]
 
 describe("DefaultValuetestcase", function () {
@@ -403,247 +354,6 @@ describe("DefaultValuetestcase", function () {
                         console.log("result >>>>>>>>>>>>>>>>>>>>" + JSON.stringify(result));
                         done();
                     })
-                }).fail(function (e) {
-                    done(e);
-                })
-        })
-    })
-
-    it("simple invoice nested lineitems without currency type", function (done) {
-        ApplaneDB.connect(Config.URL, Config.DB, function (err, db) {
-            if (err) {
-                done(err);
-                return;
-            }
-            var invoice = {invoice_no:1111, invoicelineitems:{$insert:[
-                {amt:1000, deductions:{$insert:[
-                    {damt:50}
-                ]}},
-                {amt:5000, deductions:{$insert:[
-                    {damt:1000},
-                    {damt:200}
-                ]}}
-
-            ]}, invoicelineitems1:{$insert:[
-                {amt:3000},
-                {amt:8000}
-            ]}};
-            var insertResult = undefined;
-            var updateResult = undefined;
-            db.updateAsPromise({$collection:"invoices", $insert:invoice}).then(
-                function () {
-                    return  db.queryAsPromise({$collection:"invoices"});
-                }).then(
-                function (result) {
-                    insertResult = result;
-                    console.log(">>>>>>>>>>>insertresult >>>>>>>>>>>>>>>>>>>>" + JSON.stringify(insertResult));
-                    expect(insertResult.result).to.have.length(1);
-                    expect(insertResult.result[0].invoice_no).to.eql(1111);
-                    expect(insertResult.result[0].invoice_date).to.not.eql(undefined);
-                    expect(insertResult.result[0].default_currency).to.eql("INR");
-                    expect(insertResult.result[0].totalamt).to.eql(18000);
-                    expect(insertResult.result[0].totalstax).to.eql(1800);
-                    expect(insertResult.result[0].totalnet).to.eql(16200);
-                    expect(insertResult.result[0].damt).to.eql(1250);
-                    expect(insertResult.result[0].netword).to.eql("Greater that 1000");
-                    expect(insertResult.result[0].invoicelineitems).to.have.length(2);
-
-                    expect(insertResult.result[0].invoicelineitems[0].line_no).to.eql(1111);
-                    expect(insertResult.result[0].invoicelineitems[0].damt).to.eql(50);
-                    expect(insertResult.result[0].invoicelineitems[0].amt).to.eql(1500);
-                    expect(insertResult.result[0].invoicelineitems[0].stax).to.eql(150);
-                    expect(insertResult.result[0].invoicelineitems[0].net).to.eql(1350);
-                    expect(insertResult.result[0].invoicelineitems[0].netword).to.eql("Greater that 1000");
-                    expect(insertResult.result[0].invoicelineitems[0].deductions).to.have.length(1);
-                    expect(insertResult.result[0].invoicelineitems[0].deductions[0].deduction_no).to.eql(1111);
-                    expect(insertResult.result[0].invoicelineitems[0].deductions[0].damt).to.eql(50);
-                    expect(insertResult.result[0].invoicelineitems[0].deductions[0].vat).to.eql(10);
-                    expect(insertResult.result[0].invoicelineitems[0].deductions[0].dnetamt).to.eql(60);
-
-                    expect(insertResult.result[0].invoicelineitems[1].line_no).to.eql(1111);
-                    expect(insertResult.result[0].invoicelineitems[1].damt).to.eql(1200);
-                    expect(insertResult.result[0].invoicelineitems[1].amt).to.eql(5500);
-                    expect(insertResult.result[0].invoicelineitems[1].stax).to.eql(550);
-                    expect(insertResult.result[0].invoicelineitems[1].net).to.eql(4950);
-                    expect(insertResult.result[0].invoicelineitems[1].netword).to.eql("Greater that 1000");
-                    expect(insertResult.result[0].invoicelineitems[1].deductions).to.have.length(2);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[0].deduction_no).to.eql(1111);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[0].damt).to.eql(1000);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[0].vat).to.eql(200);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[0].dnetamt).to.eql(1200);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[1].deduction_no).to.eql(1111);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[1].damt).to.eql(200);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[1].vat).to.eql(40);
-                    expect(insertResult.result[0].invoicelineitems[1].deductions[1].dnetamt).to.eql(240);
-
-                    expect(insertResult.result[0].invoicelineitems1).to.have.length(2);
-                    expect(insertResult.result[0].invoicelineitems1[0].line_no).to.eql(1111);
-                    expect(insertResult.result[0].invoicelineitems1[0].amt).to.eql(3000);
-                    expect(insertResult.result[0].invoicelineitems1[0].stax).to.eql(300);
-                    expect(insertResult.result[0].invoicelineitems1[0].net).to.eql(2700);
-                    expect(insertResult.result[0].invoicelineitems1[0].netword).to.eql("Greater that 1000");
-
-                    expect(insertResult.result[0].invoicelineitems1[1].line_no).to.eql(1111);
-                    expect(insertResult.result[0].invoicelineitems1[1].amt).to.eql(8000);
-                    expect(insertResult.result[0].invoicelineitems1[1].stax).to.eql(800);
-                    expect(insertResult.result[0].invoicelineitems1[1].net).to.eql(7200);
-                    expect(insertResult.result[0].invoicelineitems1[1].netword).to.eql("Greater that 1000");
-
-                    var updateInvoice = {_id:insertResult.result[0]._id, $set:{invoicelineitems:{$update:[
-                        {_id:insertResult.result[0].invoicelineitems[0]._id, $set:{amt:3000, deductions:{$update:[
-                            {_id:insertResult.result[0].invoicelineitems[0].deductions[0]._id, damt:100}
-                        ], $insert:[
-                            {damt:200}
-                        ]}}},
-                        {_id:insertResult.result[0].invoicelineitems[1]._id, $set:{amt:1000, deductions:{$update:[
-                            {_id:insertResult.result[0].invoicelineitems[1].deductions[1]._id, damt:500}
-                        ]}}}
-                    ], $insert:[
-                        {amt:20000, deductions:[
-                            {damt:2000}
-                        ]}
-                    ]}, invoicelineitems1:{$update:[
-                        {_id:insertResult.result[0].invoicelineitems1[1]._id, $set:{amt:10000}}
-                    ]}}};
-                    return db.updateAsPromise({$collection:"invoices", $update:updateInvoice});
-                }).then(
-                function () {
-                    return db.queryAsPromise({$collection:"invoices"});
-                }).then(
-                function (result) {
-                    updateResult = result;
-                    console.log(">>>>>>>>>>>updateResult >>>>>>>>>>>>>>>>>>>>" + JSON.stringify(updateResult));
-                    expect(updateResult.result).to.have.length(1);
-                    expect(updateResult.result[0].invoice_no).to.eql(1111);
-                    expect(updateResult.result[0].invoice_date).to.not.eql(undefined);
-                    expect(updateResult.result[0].default_currency).to.eql("INR");
-                    expect(updateResult.result[0].totalamt).to.eql(38000);
-                    expect(updateResult.result[0].totalstax).to.eql(3800);
-                    expect(updateResult.result[0].totalnet).to.eql(34200);
-                    expect(updateResult.result[0].damt).to.eql(3800);
-                    expect(updateResult.result[0].netword).to.eql("Greater that 1000");
-                    expect(updateResult.result[0].invoicelineitems).to.have.length(3);
-
-
-                    expect(updateResult.result[0].invoicelineitems[0].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[0].damt).to.eql(300);
-                    expect(updateResult.result[0].invoicelineitems[0].amt).to.eql(3500);
-                    expect(updateResult.result[0].invoicelineitems[0].stax).to.eql(350);
-                    expect(updateResult.result[0].invoicelineitems[0].net).to.eql(3150);
-                    expect(updateResult.result[0].invoicelineitems[0].netword).to.eql("Greater that 1000");
-                    expect(updateResult.result[0].invoicelineitems[0].deductions).to.have.length(2);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].deduction_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].damt).to.eql(100);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].vat).to.eql(20);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].dnetamt).to.eql(120);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[1].deduction_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[1].damt).to.eql(200);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[1].vat).to.eql(40);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[1].dnetamt).to.eql(240);
-
-                    expect(updateResult.result[0].invoicelineitems[1].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[1].damt).to.eql(1500);
-                    expect(updateResult.result[0].invoicelineitems[1].amt).to.eql(1500);
-                    expect(updateResult.result[0].invoicelineitems[1].stax).to.eql(150);
-                    expect(updateResult.result[0].invoicelineitems[1].net).to.eql(1350);
-                    expect(updateResult.result[0].invoicelineitems[1].netword).to.eql("Greater that 1000");
-                    expect(updateResult.result[0].invoicelineitems[1].deductions).to.have.length(2);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].deduction_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].damt).to.eql(1000);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].vat).to.eql(200);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].dnetamt).to.eql(1200);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[1].deduction_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[1].damt).to.eql(500);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[1].vat).to.eql(100);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[1].dnetamt).to.eql(600);
-
-                    expect(updateResult.result[0].invoicelineitems[2].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[2].damt).to.eql(2000);
-                    expect(updateResult.result[0].invoicelineitems[2].amt).to.eql(20000);
-                    expect(updateResult.result[0].invoicelineitems[2].stax).to.eql(2000);
-                    expect(updateResult.result[0].invoicelineitems[2].net).to.eql(18000);
-                    expect(updateResult.result[0].invoicelineitems[2].netword).to.eql("Greater that 1000");
-                    expect(updateResult.result[0].invoicelineitems[2].deductions).to.have.length(1);
-                    expect(updateResult.result[0].invoicelineitems[2].deductions[0].deduction_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[2].deductions[0].damt).to.eql(2000);
-                    expect(updateResult.result[0].invoicelineitems[2].deductions[0].vat).to.eql(400);
-                    expect(updateResult.result[0].invoicelineitems[2].deductions[0].dnetamt).to.eql(2400);
-
-
-                    expect(updateResult.result[0].invoicelineitems1).to.have.length(2);
-                    expect(updateResult.result[0].invoicelineitems1[0].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems1[0].amt).to.eql(3000);
-                    expect(updateResult.result[0].invoicelineitems1[0].stax).to.eql(300);
-                    expect(updateResult.result[0].invoicelineitems1[0].net).to.eql(2700);
-                    expect(updateResult.result[0].invoicelineitems1[0].netword).to.eql("Greater that 1000");
-
-                    expect(updateResult.result[0].invoicelineitems1[1].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems1[1].amt).to.eql(10000);
-                    expect(updateResult.result[0].invoicelineitems1[1].stax).to.eql(1000);
-                    expect(updateResult.result[0].invoicelineitems1[1].net).to.eql(9000);
-                    expect(updateResult.result[0].invoicelineitems1[1].netword).to.eql("Greater that 1000");
-
-                    var deleteUpdate = {_id:updateResult.result[0]._id, $set:{invoicelineitems1:{$delete:[
-                        {_id:updateResult.result[0].invoicelineitems1[1]._id}
-                    ]}, invoicelineitems:{$update:[
-                        {_id:updateResult.result[0].invoicelineitems[1]._id, deductions:{$delete:[
-                            {_id:updateResult.result[0].invoicelineitems[1].deductions[0]._id}
-                        ]}}
-                    ], $delete:[
-                        {_id:updateResult.result[0].invoicelineitems[0]._id}
-                    ]}}};
-                    return db.updateAsPromise({$collection:"invoices", $update:deleteUpdate});
-                }).then(
-                function () {
-                    return  db.queryAsPromise({$collection:"invoices"});
-                }).then(
-                function (updateResult) {
-                    console.log("+++++++=deleteResult++++++++++++++++" + JSON.stringify(updateResult));
-
-                    expect(updateResult.result).to.have.length(1);
-                    expect(updateResult.result[0].invoice_no).to.eql(1111);
-                    expect(updateResult.result[0].invoice_date).to.not.eql(undefined);
-                    expect(updateResult.result[0].default_currency).to.eql("INR");
-                    expect(updateResult.result[0].totalamt).to.eql(25000);
-                    expect(updateResult.result[0].totalstax).to.eql(2500);
-                    expect(updateResult.result[0].totalnet).to.eql(22500);
-                    expect(updateResult.result[0].damt).to.eql(1900);
-                    expect(updateResult.result[0].netword).to.eql("Greater that 1000");
-                    expect(updateResult.result[0].invoicelineitems).to.have.length(2);
-
-                    expect(updateResult.result[0].invoicelineitems[0].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[0].damt).to.eql(500);
-                    expect(updateResult.result[0].invoicelineitems[0].amt).to.eql(2000);
-                    expect(updateResult.result[0].invoicelineitems[0].stax).to.eql(200);
-                    expect(updateResult.result[0].invoicelineitems[0].net).to.eql(1800);
-                    expect(updateResult.result[0].invoicelineitems[0].netword).to.eql("Greater that 1000");
-                    expect(updateResult.result[0].invoicelineitems[0].deductions).to.have.length(1);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].deduction_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].damt).to.eql(500);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].vat).to.eql(100);
-                    expect(updateResult.result[0].invoicelineitems[0].deductions[0].dnetamt).to.eql(600);
-
-                    expect(updateResult.result[0].invoicelineitems[1].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[1].damt).to.eql(2000);
-                    expect(updateResult.result[0].invoicelineitems[1].amt).to.eql(20000);
-                    expect(updateResult.result[0].invoicelineitems[1].stax).to.eql(2000);
-                    expect(updateResult.result[0].invoicelineitems[1].net).to.eql(18000);
-                    expect(updateResult.result[0].invoicelineitems[1].netword).to.eql("Greater that 1000");
-                    expect(updateResult.result[0].invoicelineitems[1].deductions).to.have.length(1);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].deduction_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].damt).to.eql(2000);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].vat).to.eql(400);
-                    expect(updateResult.result[0].invoicelineitems[1].deductions[0].dnetamt).to.eql(2400);
-
-                    expect(updateResult.result[0].invoicelineitems1).to.have.length(1);
-                    expect(updateResult.result[0].invoicelineitems1[0].line_no).to.eql(1111);
-                    expect(updateResult.result[0].invoicelineitems1[0].amt).to.eql(3000);
-                    expect(updateResult.result[0].invoicelineitems1[0].stax).to.eql(300);
-                    expect(updateResult.result[0].invoicelineitems1[0].net).to.eql(2700);
-                    expect(updateResult.result[0].invoicelineitems1[0].netword).to.eql("Greater that 1000");
-                }).then(
-                function () {
-                    done();
                 }).fail(function (e) {
                     done(e);
                 })
